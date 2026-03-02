@@ -52,7 +52,7 @@
                   </div>
                   <div class="col-md-4">
                     <label class="form-label">Party Size <span class="text-danger">*</span></label>
-                    <select name="party_size" class="form-select" required>
+                    <select name="party_size" id="partySize" class="form-select" required>
                       <% for (let i = 1; i <= settings.max_party_size; i++) { %>
                         <option value="<%= i %>" <%= i === 2 ? 'selected' : '' %>><%= i %> <%= i === 1 ? 'Guest' : 'Guests' %></option>
                       <% } %>
@@ -64,7 +64,21 @@
                   </div>
                   <div class="col-md-4">
                     <label class="form-label">Time <span class="text-danger">*</span></label>
-                    <input type="time" name="reservation_time" class="form-control" required>
+                    <input type="time" name="reservation_time" class="form-control" id="reservationTime" required>
+                  </div>
+
+                  <!-- Table Selection -->
+                  <div class="col-12" id="tableSelectionSection" style="display: none;">
+                    <h6 class="fw-bold text-primary border-bottom pb-2 mb-3 mt-2">Select Your Table</h6>
+                    <div id="tableLoadingMsg" class="text-center text-muted py-3" style="display: none;">
+                      <div class="spinner-border spinner-border-sm text-primary me-2" role="status"></div>
+                      Finding available tables...
+                    </div>
+                    <div id="noTablesMsg" class="alert alert-warning" style="display: none;">
+                      <i class="bi bi-exclamation-triangle me-2"></i>No tables available for the selected date, time, and party size. Try adjusting your selection.
+                    </div>
+                    <div id="tableCards" class="row g-3"></div>
+                    <input type="hidden" name="table_id" id="selectedTableId" value="">
                   </div>
 
                   <div class="col-12">
@@ -136,6 +150,14 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   const dateInput = document.getElementById('reservationDate');
+  const timeInput = document.getElementById('reservationTime');
+  const partySize = document.getElementById('partySize');
+  const tableSection = document.getElementById('tableSelectionSection');
+  const tableCards = document.getElementById('tableCards');
+  const loadingMsg = document.getElementById('tableLoadingMsg');
+  const noTablesMsg = document.getElementById('noTablesMsg');
+  const selectedTableInput = document.getElementById('selectedTableId');
+
   if (dateInput) {
     const today = new Date();
     const minDate = new Date(today);
@@ -147,5 +169,80 @@ document.addEventListener('DOMContentLoaded', function() {
     dateInput.max = maxDate.toISOString().split('T')[0];
     dateInput.value = minDate.toISOString().split('T')[0];
   }
+
+  let fetchTimeout = null;
+
+  function fetchAvailableTables() {
+    const date = dateInput ? dateInput.value : '';
+    const time = timeInput ? timeInput.value : '';
+    const size = partySize ? partySize.value : '';
+
+    if (!date || !time || !size) {
+      tableSection.style.display = 'none';
+      return;
+    }
+
+    // Clear previous selection
+    selectedTableInput.value = '';
+    tableSection.style.display = '';
+    loadingMsg.style.display = '';
+    noTablesMsg.style.display = 'none';
+    tableCards.innerHTML = '';
+
+    clearTimeout(fetchTimeout);
+    fetchTimeout = setTimeout(function() {
+      fetch('/api/available-tables?date=' + encodeURIComponent(date) + '&time=' + encodeURIComponent(time) + '&party_size=' + encodeURIComponent(size))
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          loadingMsg.style.display = 'none';
+
+          if (!data.tables || data.tables.length === 0) {
+            noTablesMsg.style.display = '';
+            return;
+          }
+
+          var html = '';
+          data.tables.forEach(function(t) {
+            var icon = t.location_icon || 'geo-alt';
+            var locName = t.location_name || '';
+            html += '<div class="col-md-4 col-sm-6">' +
+              '<div class="card table-option h-100 border-2" data-table-id="' + t.id + '" style="cursor:pointer; transition: all 0.2s;">' +
+                '<div class="card-body text-center py-3">' +
+                  '<div class="d-inline-flex align-items-center justify-content-center rounded-circle bg-primary-subtle text-primary mb-2" style="width:48px;height:48px;font-size:1.2rem;">' +
+                    '<i class="bi bi-' + icon + '"></i>' +
+                  '</div>' +
+                  '<h6 class="fw-bold mb-1">Table ' + t.table_number + '</h6>' +
+                  '<p class="text-muted small mb-1"><i class="bi bi-people me-1"></i>' + t.capacity + ' seats</p>' +
+                  (locName ? '<span class="badge bg-light text-dark"><i class="bi bi-' + icon + ' me-1"></i>' + locName + '</span>' : '') +
+                '</div>' +
+              '</div>' +
+            '</div>';
+          });
+
+          tableCards.innerHTML = html;
+
+          // Add click handlers
+          document.querySelectorAll('.table-option').forEach(function(card) {
+            card.addEventListener('click', function() {
+              document.querySelectorAll('.table-option').forEach(function(c) {
+                c.classList.remove('border-primary', 'shadow');
+                c.style.borderColor = '';
+              });
+              card.classList.add('border-primary', 'shadow');
+              card.style.borderColor = '#e94560';
+              selectedTableInput.value = card.getAttribute('data-table-id');
+            });
+          });
+        })
+        .catch(function() {
+          loadingMsg.style.display = 'none';
+          noTablesMsg.style.display = '';
+        });
+    }, 300);
+  }
+
+  if (dateInput) dateInput.addEventListener('change', fetchAvailableTables);
+  if (timeInput) timeInput.addEventListener('change', fetchAvailableTables);
+  if (partySize) partySize.addEventListener('change', fetchAvailableTables);
 });
 </script>

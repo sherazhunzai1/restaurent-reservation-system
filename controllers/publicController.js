@@ -1,4 +1,6 @@
-const { Reservation, OperatingHours, RestaurantSettings } = require('../models');
+const { Op } = require('sequelize');
+const moment = require('moment');
+const { Reservation, OperatingHours, RestaurantSettings, Table, TableLocation } = require('../models');
 
 function generateReservationCode() {
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -53,7 +55,7 @@ exports.submitReservation = async (req, res) => {
       return res.redirect('/reserve');
     }
 
-    const { customer_name, customer_email, customer_phone, party_size, reservation_date, reservation_time, special_requests } = req.body;
+    const { customer_name, customer_email, customer_phone, party_size, reservation_date, reservation_time, table_id, special_requests } = req.body;
 
     if (!customer_name || !customer_phone || !party_size || !reservation_date || !reservation_time) {
       req.flash('error', 'Please fill in all required fields');
@@ -68,6 +70,7 @@ exports.submitReservation = async (req, res) => {
       party_size: parseInt(party_size),
       reservation_date,
       reservation_time,
+      table_id: table_id || null,
       status: settings.auto_confirm_reservations ? 'confirmed' : 'pending',
       special_requests: special_requests || null,
       source: 'online',
@@ -82,5 +85,74 @@ exports.submitReservation = async (req, res) => {
     console.error('Submit reservation error:', error);
     req.flash('error', 'Error creating reservation: ' + error.message);
     res.redirect('/reserve');
+  }
+};
+
+exports.availableTables = async (req, res) => {
+  try {
+    const { date, time, party_size } = req.query;
+
+    if (!date || !time || !party_size) {
+      return res.json({ tables: [] });
+    }
+
+    const size = parseInt(party_size);
+    const settings = await RestaurantSettings.findOne() || {};
+    const duration = settings.default_reservation_duration || 90;
+
+    // Calculate the time window for this reservation
+    const startMoment = moment(`${date} ${time}`, 'YYYY-MM-DD HH:mm');
+    const endMoment = moment(startMoment).add(duration, 'minutes');
+    const reqStart = startMoment.format('HH:mm:ss');
+    const reqEnd = endMoment.format('HH:mm:ss');
+
+    // Find tables that already have an overlapping reservation on this date
+    const conflicting = await Reservation.findAll({
+      where: {
+        reservation_date: date,
+        status: { [Op.in]: ['pending', 'confirmed', 'seated'] },
+      },
+      attributes: ['table_id', 'reservation_time', 'end_time'],
+      raw: true,
+    });
+
+    const busyTableIds = new Set();
+    conflicting.forEach(r => {
+      if (!r.table_id) return;
+      const rStart = r.reservation_time;
+      const rEnd = r.end_time || moment(`${date} ${r.reservation_time}`, 'YYYY-MM-DD HH:mm:ss').add(duration, 'minutes').format('HH:mm:ss');
+      // Check overlap: new start < existing end AND new end > existing start
+      if (reqStart < rEnd && reqEnd > rStart) {
+        busyTableIds.add(r.table_id);
+      }
+    });
+
+    // Get all active tables that fit the party size
+    const whereClause = {
+      is_active: true,
+      capacity: { [Op.gte]: size },
+    };
+    if (busyTableIds.size > 0) {
+      whereClause.id = { [Op.notIn]: Array.from(busyTableIds) };
+    }
+
+    const tables = await Table.findAll({
+      where: whereClause,
+      include: [{ model: TableLocation, as: 'location' }],
+      order: [['capacity', 'ASC'], ['table_number', 'ASC']],
+    });
+
+    res.json({
+      tables: tables.map(t => ({
+        id: t.id,
+        table_number: t.table_number,
+        capacity: t.capacity,
+        location_name: t.location ? t.location.name : null,
+        location_icon: t.location ? t.location.icon : null,
+      })),
+    });
+  } catch (error) {
+    console.error('Available tables error:', error);
+    res.json({ tables: [] });
   }
 };
