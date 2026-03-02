@@ -34,7 +34,7 @@ exports.index = async (req, res) => {
   } catch (error) {
     console.error('Tables index error:', error);
     req.flash('error', 'Error loading tables');
-    res.redirect('/dashboard');
+    res.redirect('/admin/dashboard');
   }
 };
 
@@ -54,11 +54,11 @@ exports.store = async (req, res) => {
       description: description || null,
     });
     req.flash('success', `Table ${table_number} created successfully`);
-    res.redirect('/tables');
+    res.redirect('/admin/tables');
   } catch (error) {
     console.error('Table store error:', error);
     req.flash('error', 'Error creating table: ' + error.message);
-    res.redirect('/tables/create');
+    res.redirect('/admin/tables/create');
   }
 };
 
@@ -69,14 +69,14 @@ exports.edit = async (req, res) => {
     });
     if (!table) {
       req.flash('error', 'Table not found');
-      return res.redirect('/tables');
+      return res.redirect('/admin/tables');
     }
     const locations = await TableLocation.findAll({ where: { is_active: true }, order: [['name', 'ASC']] });
     res.render('pages/tables/edit', { title: `Edit Table ${table.table_number}`, table, locations });
   } catch (error) {
     console.error('Table edit error:', error);
     req.flash('error', 'Error loading table');
-    res.redirect('/tables');
+    res.redirect('/admin/tables');
   }
 };
 
@@ -85,7 +85,7 @@ exports.update = async (req, res) => {
     const table = await Table.findByPk(req.params.id);
     if (!table) {
       req.flash('error', 'Table not found');
-      return res.redirect('/tables');
+      return res.redirect('/admin/tables');
     }
 
     const { table_number, capacity, location_id, status, is_active, description } = req.body;
@@ -99,11 +99,11 @@ exports.update = async (req, res) => {
     });
 
     req.flash('success', `Table ${table.table_number} updated successfully`);
-    res.redirect('/tables');
+    res.redirect('/admin/tables');
   } catch (error) {
     console.error('Table update error:', error);
     req.flash('error', 'Error updating table: ' + error.message);
-    res.redirect(`/tables/${req.params.id}/edit`);
+    res.redirect(`/admin/tables/${req.params.id}/edit`);
   }
 };
 
@@ -112,7 +112,7 @@ exports.destroy = async (req, res) => {
     const table = await Table.findByPk(req.params.id);
     if (!table) {
       req.flash('error', 'Table not found');
-      return res.redirect('/tables');
+      return res.redirect('/admin/tables');
     }
 
     // Check for active reservations
@@ -126,15 +126,15 @@ exports.destroy = async (req, res) => {
 
     if (activeReservations > 0) {
       req.flash('error', `Cannot delete table ${table.table_number} - it has ${activeReservations} upcoming reservation(s)`);
-      return res.redirect('/tables');
+      return res.redirect('/admin/tables');
     }
 
     await table.destroy();
     req.flash('success', `Table ${table.table_number} deleted successfully`);
-    res.redirect('/tables');
+    res.redirect('/admin/tables');
   } catch (error) {
     console.error('Table delete error:', error);
     req.flash('error', 'Error deleting table');
-    res.redirect('/tables');
+    res.redirect('/admin/tables');
   }
 };

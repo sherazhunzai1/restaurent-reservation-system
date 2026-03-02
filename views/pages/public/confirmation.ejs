@@ -1,0 +1,82 @@
+<!-- Confirmation Header -->
+<section class="page-header d-flex align-items-center">
+  <div class="container text-center">
+    <h1 class="font-serif fw-bold text-white mb-2">Reservation Confirmed</h1>
+    <p class="text-white-50">Thank you for choosing <%= restaurant.name %></p>
+  </div>
+</section>
+
+<section class="py-5">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-6">
+        <div class="text-center mb-4">
+          <div class="confirmation-check mx-auto mb-3">
+            <i class="bi bi-check-lg"></i>
+          </div>
+          <h3 class="font-serif fw-bold">Your Table is Reserved!</h3>
+          <p class="text-muted">We've received your reservation request. Here are your details:</p>
+        </div>
+
+        <div class="card border-0 shadow-sm mb-4">
+          <div class="card-body p-4">
+            <div class="text-center mb-4">
+              <span class="badge bg-primary-subtle text-primary fs-6 px-3 py-2">
+                <i class="bi bi-ticket-perforated me-1"></i>Reservation Code: <strong><%= reservation.reservation_code %></strong>
+              </span>
+            </div>
+
+            <div class="row g-3">
+              <div class="col-6">
+                <label class="text-muted small">Name</label>
+                <p class="fw-medium mb-0"><%= reservation.customer_name %></p>
+              </div>
+              <div class="col-6">
+                <label class="text-muted small">Phone</label>
+                <p class="fw-medium mb-0"><%= reservation.customer_phone %></p>
+              </div>
+              <% if (reservation.customer_email) { %>
+                <div class="col-12">
+                  <label class="text-muted small">Email</label>
+                  <p class="fw-medium mb-0"><%= reservation.customer_email %></p>
+                </div>
+              <% } %>
+              <div class="col-4">
+                <label class="text-muted small">Date</label>
+                <p class="fw-medium mb-0"><%= reservation.reservation_date %></p>
+              </div>
+              <div class="col-4">
+                <label class="text-muted small">Time</label>
+                <p class="fw-medium mb-0"><%= reservation.reservation_time %></p>
+              </div>
+              <div class="col-4">
+                <label class="text-muted small">Party Size</label>
+                <p class="fw-medium mb-0"><%= reservation.party_size %> <%= reservation.party_size === 1 ? 'Guest' : 'Guests' %></p>
+              </div>
+              <% if (reservation.special_requests) { %>
+                <div class="col-12">
+                  <label class="text-muted small">Special Requests</label>
+                  <p class="fw-medium mb-0"><%= reservation.special_requests %></p>
+                </div>
+              <% } %>
+            </div>
+
+            <hr>
+            <div class="text-center">
+              <span class="badge bg-warning-subtle text-warning fs-6 px-3 py-2">
+                <i class="bi bi-hourglass-split me-1"></i>Status: Pending Confirmation
+              </span>
+              <p class="text-muted small mt-2 mb-0">Our team will confirm your reservation shortly.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="text-center">
+          <p class="text-muted mb-3">Please save your reservation code: <strong><%= reservation.reservation_code %></strong></p>
+          <a href="/" class="btn btn-outline-primary me-2"><i class="bi bi-house me-1"></i>Back to Home</a>
+          <a href="/reserve" class="btn btn-primary"><i class="bi bi-plus-lg me-1"></i>Make Another Reservation</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

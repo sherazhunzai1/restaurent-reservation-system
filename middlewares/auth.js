@@ -3,7 +3,7 @@ const isAuthenticated = (req, res, next) => {
     return next();
   }
   req.flash('error', 'Please log in to access this page');
-  res.redirect('/auth/login');
+  res.redirect('/admin/auth/login');
 };
 
 const isSuperAdmin = (req, res, next) => {
@@ -11,7 +11,7 @@ const isSuperAdmin = (req, res, next) => {
     return next();
   }
   req.flash('error', 'You do not have permission to access this page');
-  res.redirect('/dashboard');
+  res.redirect('/admin/dashboard');
 };
 
 const setLocals = (req, res, next) => {
@@ -27,7 +27,7 @@ const setLocals = (req, res, next) => {
   };
   res.locals.success = req.flash('success');
   res.locals.error = req.flash('error');
-  res.locals.currentPath = req.path;
+  res.locals.currentPath = req.originalUrl.split('?')[0];
   next();
 };
 

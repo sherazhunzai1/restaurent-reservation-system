@@ -3,7 +3,7 @@
     <h3 class="fw-bold mb-1">Today's Reservations</h3>
     <p class="text-muted mb-0"><%= moment(today).format('dddd, MMMM D, YYYY') %></p>
   </div>
-  <a href="/reservations/create" class="btn btn-primary"><i class="bi bi-plus-lg me-1"></i>New Reservation</a>
+  <a href="/admin/reservations/create" class="btn btn-primary"><i class="bi bi-plus-lg me-1"></i>New Reservation</a>
 </div>
 
 <!-- Quick Stats -->
@@ -65,7 +65,7 @@
             <% reservations.forEach(function(r) { %>
               <tr>
                 <td class="fw-medium"><%= r.reservation_time %><%= r.end_time ? ' - ' + r.end_time : '' %></td>
-                <td><a href="/reservations/<%= r.id %>" class="text-decoration-none"><%= r.reservation_code %></a></td>
+                <td><a href="/admin/reservations/<%= r.id %>" class="text-decoration-none"><%= r.reservation_code %></a></td>
                 <td>
                   <div class="fw-medium"><%= r.customer_name %></div>
                   <small class="text-muted"><%= r.customer_phone %></small>
@@ -80,27 +80,27 @@
                 <td>
                   <div class="btn-group btn-group-sm">
                     <% if (r.status === 'pending') { %>
-                      <form action="/reservations/<%= r.id %>/status" method="POST" class="d-inline">
+                      <form action="/admin/reservations/<%= r.id %>/status" method="POST" class="d-inline">
                         <input type="hidden" name="_method" value="PATCH">
                         <input type="hidden" name="status" value="confirmed">
                         <button class="btn btn-outline-primary" title="Confirm"><i class="bi bi-check"></i></button>
                       </form>
                     <% } %>
                     <% if (r.status === 'confirmed') { %>
-                      <form action="/reservations/<%= r.id %>/status" method="POST" class="d-inline">
+                      <form action="/admin/reservations/<%= r.id %>/status" method="POST" class="d-inline">
                         <input type="hidden" name="_method" value="PATCH">
                         <input type="hidden" name="status" value="seated">
                         <button class="btn btn-outline-info" title="Seat"><i class="bi bi-box-arrow-in-down"></i></button>
                       </form>
                     <% } %>
                     <% if (r.status === 'seated') { %>
-                      <form action="/reservations/<%= r.id %>/status" method="POST" class="d-inline">
+                      <form action="/admin/reservations/<%= r.id %>/status" method="POST" class="d-inline">
                         <input type="hidden" name="_method" value="PATCH">
                         <input type="hidden" name="status" value="completed">
                         <button class="btn btn-outline-success" title="Complete"><i class="bi bi-check2-all"></i></button>
                       </form>
                     <% } %>
-                    <a href="/reservations/<%= r.id %>" class="btn btn-outline-secondary" title="View"><i class="bi bi-eye"></i></a>
+                    <a href="/admin/reservations/<%= r.id %>" class="btn btn-outline-secondary" title="View"><i class="bi bi-eye"></i></a>
                   </div>
                 </td>
               </tr>

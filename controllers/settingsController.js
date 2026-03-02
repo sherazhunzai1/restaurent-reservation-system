@@ -11,7 +11,7 @@ exports.general = async (req, res) => {
   } catch (error) {
     console.error('Settings error:', error);
     req.flash('error', 'Error loading settings');
-    res.redirect('/dashboard');
+    res.redirect('/admin/dashboard');
   }
 };
 
@@ -41,11 +41,11 @@ exports.updateGeneral = async (req, res) => {
     });
 
     req.flash('success', 'Settings updated successfully');
-    res.redirect('/settings');
+    res.redirect('/admin/settings');
   } catch (error) {
     console.error('Settings update error:', error);
     req.flash('error', 'Error updating settings');
-    res.redirect('/settings');
+    res.redirect('/admin/settings');
   }
 };
 
@@ -76,7 +76,7 @@ exports.operatingHours = async (req, res) => {
   } catch (error) {
     console.error('Operating hours error:', error);
     req.flash('error', 'Error loading operating hours');
-    res.redirect('/settings');
+    res.redirect('/admin/settings');
   }
 };
 
@@ -99,11 +99,11 @@ exports.updateOperatingHours = async (req, res) => {
     }
 
     req.flash('success', 'Operating hours updated successfully');
-    res.redirect('/settings/hours');
+    res.redirect('/admin/settings/hours');
   } catch (error) {
     console.error('Operating hours update error:', error);
     req.flash('error', 'Error updating operating hours');
-    res.redirect('/settings/hours');
+    res.redirect('/admin/settings/hours');
   }
 };
 
@@ -119,7 +119,7 @@ exports.specialDates = async (req, res) => {
   } catch (error) {
     console.error('Special dates error:', error);
     req.flash('error', 'Error loading special dates');
-    res.redirect('/settings');
+    res.redirect('/admin/settings');
   }
 };
 
@@ -135,11 +135,11 @@ exports.storeSpecialDate = async (req, res) => {
       notes: notes || null,
     });
     req.flash('success', 'Special date added successfully');
-    res.redirect('/settings/special-dates');
+    res.redirect('/admin/settings/special-dates');
   } catch (error) {
     console.error('Special date store error:', error);
     req.flash('error', 'Error adding special date');
-    res.redirect('/settings/special-dates');
+    res.redirect('/admin/settings/special-dates');
   }
 };
 
@@ -147,11 +147,11 @@ exports.deleteSpecialDate = async (req, res) => {
   try {
     await SpecialDate.destroy({ where: { id: req.params.id } });
     req.flash('success', 'Special date removed successfully');
-    res.redirect('/settings/special-dates');
+    res.redirect('/admin/settings/special-dates');
   } catch (error) {
     console.error('Special date delete error:', error);
     req.flash('error', 'Error removing special date');
-    res.redirect('/settings/special-dates');
+    res.redirect('/admin/settings/special-dates');
   }
 };
 
@@ -164,7 +164,7 @@ exports.staffIndex = async (req, res) => {
   } catch (error) {
     console.error('Staff index error:', error);
     req.flash('error', 'Error loading staff');
-    res.redirect('/settings');
+    res.redirect('/admin/settings');
   }
 };
 
@@ -179,11 +179,11 @@ exports.storeStaff = async (req, res) => {
       role: role || 'staff',
     });
     req.flash('success', 'Staff member added successfully');
-    res.redirect('/settings/staff');
+    res.redirect('/admin/settings/staff');
   } catch (error) {
     console.error('Staff store error:', error);
     req.flash('error', 'Error adding staff member: ' + error.message);
-    res.redirect('/settings/staff');
+    res.redirect('/admin/settings/staff');
   }
 };
 
@@ -192,19 +192,19 @@ exports.toggleStaffStatus = async (req, res) => {
     const admin = await Admin.findByPk(req.params.id);
     if (!admin) {
       req.flash('error', 'Staff member not found');
-      return res.redirect('/settings/staff');
+      return res.redirect('/admin/settings/staff');
     }
     if (admin.id === req.session.admin.id) {
       req.flash('error', 'You cannot deactivate your own account');
-      return res.redirect('/settings/staff');
+      return res.redirect('/admin/settings/staff');
     }
     await admin.update({ is_active: !admin.is_active });
     req.flash('success', `Staff member ${admin.is_active ? 'activated' : 'deactivated'} successfully`);
-    res.redirect('/settings/staff');
+    res.redirect('/admin/settings/staff');
   } catch (error) {
     console.error('Toggle staff error:', error);
     req.flash('error', 'Error updating staff status');
-    res.redirect('/settings/staff');
+    res.redirect('/admin/settings/staff');
   }
 };
 
@@ -213,18 +213,18 @@ exports.deleteStaff = async (req, res) => {
     const admin = await Admin.findByPk(req.params.id);
     if (!admin) {
       req.flash('error', 'Staff member not found');
-      return res.redirect('/settings/staff');
+      return res.redirect('/admin/settings/staff');
     }
     if (admin.id === req.session.admin.id) {
       req.flash('error', 'You cannot delete your own account');
-      return res.redirect('/settings/staff');
+      return res.redirect('/admin/settings/staff');
     }
     await admin.destroy();
     req.flash('success', 'Staff member deleted successfully');
-    res.redirect('/settings/staff');
+    res.redirect('/admin/settings/staff');
   } catch (error) {
     console.error('Delete staff error:', error);
     req.flash('error', 'Error deleting staff member');
-    res.redirect('/settings/staff');
+    res.redirect('/admin/settings/staff');
   }
 };

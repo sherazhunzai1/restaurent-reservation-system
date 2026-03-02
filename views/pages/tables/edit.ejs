@@ -1,13 +1,13 @@
 <div class="d-flex justify-content-between align-items-center mb-4">
   <h3 class="fw-bold mb-0">Edit Table <%= table.table_number %></h3>
-  <a href="/tables" class="btn btn-outline-secondary"><i class="bi bi-arrow-left me-1"></i>Back</a>
+  <a href="/admin/tables" class="btn btn-outline-secondary"><i class="bi bi-arrow-left me-1"></i>Back</a>
 </div>
 
 <div class="row justify-content-center">
   <div class="col-lg-6">
     <div class="card border-0 shadow-sm">
       <div class="card-body">
-        <form action="/tables/<%= table.id %>?_method=PUT" method="POST">
+        <form action="/admin/tables/<%= table.id %>?_method=PUT" method="POST">
           <input type="hidden" name="_method" value="PUT">
           <div class="mb-3">
             <label class="form-label">Table Number <span class="text-danger">*</span></label>
@@ -25,7 +25,7 @@
                 <option value="<%= loc.id %>" <%= table.location_id == loc.id ? 'selected' : '' %>><%= loc.name %></option>
               <% }); %>
             </select>
-            <small class="form-text text-muted">Manage locations in <a href="/settings/locations">Settings &rarr; Locations</a></small>
+            <small class="form-text text-muted">Manage locations in <a href="/admin/settings/locations">Settings &rarr; Locations</a></small>
           </div>
           <div class="mb-3">
             <label class="form-label">Status</label>
@@ -47,7 +47,7 @@
             <textarea name="description" class="form-control" rows="3"><%= table.description || '' %></textarea>
           </div>
           <button type="submit" class="btn btn-primary"><i class="bi bi-check-lg me-1"></i>Update Table</button>
-          <a href="/tables" class="btn btn-outline-secondary ms-2">Cancel</a>
+          <a href="/admin/tables" class="btn btn-outline-secondary ms-2">Cancel</a>
         </form>
       </div>
     </div>

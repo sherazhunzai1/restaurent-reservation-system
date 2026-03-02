@@ -52,13 +52,13 @@
                     data-icon="<%= loc.icon %>">
                     <i class="bi bi-pencil"></i>
                   </button>
-                  <form action="/settings/locations/<%= loc.id %>/toggle?_method=PATCH" method="POST" class="d-inline">
+                  <form action="/admin/settings/locations/<%= loc.id %>/toggle?_method=PATCH" method="POST" class="d-inline">
                     <input type="hidden" name="_method" value="PATCH">
                     <button type="submit" class="btn btn-sm btn-outline-<%= loc.is_active ? 'warning' : 'success' %> me-1" title="<%= loc.is_active ? 'Deactivate' : 'Activate' %>">
                       <i class="bi bi-<%= loc.is_active ? 'pause-circle' : 'play-circle' %>"></i>
                     </button>
                   </form>
-                  <form action="/settings/locations/<%= loc.id %>?_method=DELETE" method="POST" class="d-inline" onsubmit="return confirm('Delete location &quot;<%= loc.name %>&quot;?')">
+                  <form action="/admin/settings/locations/<%= loc.id %>?_method=DELETE" method="POST" class="d-inline" onsubmit="return confirm('Delete location &quot;<%= loc.name %>&quot;?')">
                     <input type="hidden" name="_method" value="DELETE">
                     <button type="submit" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
                   </form>
@@ -93,7 +93,7 @@
 <div class="modal fade" id="addLocationModal" tabindex="-1">
   <div class="modal-dialog">
     <div class="modal-content">
-      <form action="/settings/locations" method="POST">
+      <form action="/admin/settings/locations" method="POST">
         <div class="modal-header">
           <h5 class="modal-title">Add Location</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
@@ -157,7 +157,7 @@ document.addEventListener('DOMContentLoaded', function() {
       const id = btn.getAttribute('data-id');
       const name = btn.getAttribute('data-name');
       const icon = btn.getAttribute('data-icon');
-      document.getElementById('editLocationForm').action = '/settings/locations/' + id + '?_method=PUT';
+      document.getElementById('editLocationForm').action = '/admin/settings/locations/' + id + '?_method=PUT';
       document.getElementById('editName').value = name;
       document.getElementById('editIcon').value = icon;
     });

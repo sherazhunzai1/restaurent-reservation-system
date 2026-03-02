@@ -4,11 +4,11 @@
 
 <div class="card border-0 shadow-sm">
   <div class="card-header bg-white d-flex justify-content-between align-items-center">
-    <a href="/reservations/calendar?month=<%= currentMonth === 1 ? 12 : currentMonth - 1 %>&year=<%= currentMonth === 1 ? currentYear - 1 : currentYear %>" class="btn btn-outline-primary btn-sm">
+    <a href="/admin/reservations/calendar?month=<%= currentMonth === 1 ? 12 : currentMonth - 1 %>&year=<%= currentMonth === 1 ? currentYear - 1 : currentYear %>" class="btn btn-outline-primary btn-sm">
       <i class="bi bi-chevron-left"></i> Previous
     </a>
     <h5 class="fw-bold mb-0"><%= moment({ month: currentMonth - 1 }).format('MMMM') %> <%= currentYear %></h5>
-    <a href="/reservations/calendar?month=<%= currentMonth === 12 ? 1 : currentMonth + 1 %>&year=<%= currentMonth === 12 ? currentYear + 1 : currentYear %>" class="btn btn-outline-primary btn-sm">
+    <a href="/admin/reservations/calendar?month=<%= currentMonth === 12 ? 1 : currentMonth + 1 %>&year=<%= currentMonth === 12 ? currentYear + 1 : currentYear %>" class="btn btn-outline-primary btn-sm">
       Next <i class="bi bi-chevron-right"></i>
     </a>
   </div>
@@ -48,7 +48,7 @@
                   <div class="d-flex flex-column align-items-center">
                     <span class="calendar-day <%= isToday ? 'fw-bold text-primary' : '' %>"><%= day %></span>
                     <% if (count > 0) { %>
-                      <a href="/reservations?date=<%= dateStr %>" class="badge bg-primary mt-1 text-decoration-none">
+                      <a href="/admin/reservations?date=<%= dateStr %>" class="badge bg-primary mt-1 text-decoration-none">
                         <%= count %> res.
                       </a>
                     <% } %>

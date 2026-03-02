@@ -5,10 +5,10 @@
 <div class="row">
   <div class="col-lg-3 mb-4">
     <div class="list-group shadow-sm">
-      <a href="/settings" class="list-group-item list-group-item-action"><i class="bi bi-gear me-2"></i>General</a>
-      <a href="/settings/hours" class="list-group-item list-group-item-action"><i class="bi bi-clock me-2"></i>Operating Hours</a>
-      <a href="/settings/special-dates" class="list-group-item list-group-item-action"><i class="bi bi-calendar-event me-2"></i>Special Dates</a>
-      <a href="/settings/staff" class="list-group-item list-group-item-action active"><i class="bi bi-people me-2"></i>Staff</a>
+      <a href="/admin/settings" class="list-group-item list-group-item-action"><i class="bi bi-gear me-2"></i>General</a>
+      <a href="/admin/settings/hours" class="list-group-item list-group-item-action"><i class="bi bi-clock me-2"></i>Operating Hours</a>
+      <a href="/admin/settings/special-dates" class="list-group-item list-group-item-action"><i class="bi bi-calendar-event me-2"></i>Special Dates</a>
+      <a href="/admin/settings/staff" class="list-group-item list-group-item-action active"><i class="bi bi-people me-2"></i>Staff</a>
     </div>
   </div>
 
@@ -17,7 +17,7 @@
     <div class="card border-0 shadow-sm mb-4">
       <div class="card-header bg-white"><h6 class="fw-bold mb-0">Add Staff Member</h6></div>
       <div class="card-body">
-        <form action="/settings/staff" method="POST">
+        <form action="/admin/settings/staff" method="POST">
           <div class="row g-3">
             <div class="col-md-6">
               <label class="form-label">Full Name <span class="text-danger">*</span></label>
@@ -81,13 +81,13 @@
                   <td><%= s.last_login ? new Date(s.last_login).toLocaleDateString() : 'Never' %></td>
                   <td>
                     <% if (s.id !== admin.id) { %>
-                      <form action="/settings/staff/<%= s.id %>/toggle?_method=PATCH" method="POST" class="d-inline">
+                      <form action="/admin/settings/staff/<%= s.id %>/toggle?_method=PATCH" method="POST" class="d-inline">
                         <input type="hidden" name="_method" value="PATCH">
                         <button class="btn btn-sm btn-outline-<%= s.is_active ? 'warning' : 'success' %>" title="<%= s.is_active ? 'Deactivate' : 'Activate' %>">
                           <i class="bi bi-<%= s.is_active ? 'pause' : 'play' %>"></i>
                         </button>
                       </form>
-                      <form action="/settings/staff/<%= s.id %>?_method=DELETE" method="POST" class="d-inline" onsubmit="return confirm('Delete this staff member?')">
+                      <form action="/admin/settings/staff/<%= s.id %>?_method=DELETE" method="POST" class="d-inline" onsubmit="return confirm('Delete this staff member?')">
                         <input type="hidden" name="_method" value="DELETE">
                         <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
                       </form>

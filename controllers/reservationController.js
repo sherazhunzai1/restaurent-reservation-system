@@ -67,7 +67,7 @@ exports.index = async (req, res) => {
   } catch (error) {
     console.error('Reservations index error:', error);
     req.flash('error', 'Error loading reservations');
-    res.redirect('/dashboard');
+    res.redirect('/admin/dashboard');
   }
 };
 
@@ -86,7 +86,7 @@ exports.create = async (req, res) => {
   } catch (error) {
     console.error('Reservation create page error:', error);
     req.flash('error', 'Error loading create form');
-    res.redirect('/reservations');
+    res.redirect('/admin/reservations');
   }
 };
 
@@ -116,11 +116,11 @@ exports.store = async (req, res) => {
     });
 
     req.flash('success', `Reservation ${reservation.reservation_code} created successfully`);
-    res.redirect('/reservations');
+    res.redirect('/admin/reservations');
   } catch (error) {
     console.error('Reservation store error:', error);
     req.flash('error', 'Error creating reservation: ' + error.message);
-    res.redirect('/reservations/create');
+    res.redirect('/admin/reservations/create');
   }
 };
 
@@ -135,7 +135,7 @@ exports.show = async (req, res) => {
 
     if (!reservation) {
       req.flash('error', 'Reservation not found');
-      return res.redirect('/reservations');
+      return res.redirect('/admin/reservations');
     }
 
     res.render('pages/reservations/show', {
@@ -146,7 +146,7 @@ exports.show = async (req, res) => {
   } catch (error) {
     console.error('Reservation show error:', error);
     req.flash('error', 'Error loading reservation');
-    res.redirect('/reservations');
+    res.redirect('/admin/reservations');
   }
 };
 
@@ -155,7 +155,7 @@ exports.edit = async (req, res) => {
     const reservation = await Reservation.findByPk(req.params.id);
     if (!reservation) {
       req.flash('error', 'Reservation not found');
-      return res.redirect('/reservations');
+      return res.redirect('/admin/reservations');
     }
 
     const tables = await Table.findAll({
@@ -173,7 +173,7 @@ exports.edit = async (req, res) => {
   } catch (error) {
     console.error('Reservation edit error:', error);
     req.flash('error', 'Error loading reservation');
-    res.redirect('/reservations');
+    res.redirect('/admin/reservations');
   }
 };
 
@@ -182,7 +182,7 @@ exports.update = async (req, res) => {
     const reservation = await Reservation.findByPk(req.params.id);
     if (!reservation) {
       req.flash('error', 'Reservation not found');
-      return res.redirect('/reservations');
+      return res.redirect('/admin/reservations');
     }
 
     const {
@@ -207,11 +207,11 @@ exports.update = async (req, res) => {
     });
 
     req.flash('success', `Reservation ${reservation.reservation_code} updated successfully`);
-    res.redirect(`/reservations/${reservation.id}`);
+    res.redirect(`/admin/reservations/${reservation.id}`);
   } catch (error) {
     console.error('Reservation update error:', error);
     req.flash('error', 'Error updating reservation: ' + error.message);
-    res.redirect(`/reservations/${req.params.id}/edit`);
+    res.redirect(`/admin/reservations/${req.params.id}/edit`);
   }
 };
 
@@ -220,16 +220,16 @@ exports.updateStatus = async (req, res) => {
     const reservation = await Reservation.findByPk(req.params.id);
     if (!reservation) {
       req.flash('error', 'Reservation not found');
-      return res.redirect('/reservations');
+      return res.redirect('/admin/reservations');
     }
 
     await reservation.update({ status: req.body.status });
     req.flash('success', `Reservation status updated to ${req.body.status}`);
-    res.redirect(`/reservations/${reservation.id}`);
+    res.redirect(`/admin/reservations/${reservation.id}`);
   } catch (error) {
     console.error('Status update error:', error);
     req.flash('error', 'Error updating status');
-    res.redirect('/reservations');
+    res.redirect('/admin/reservations');
   }
 };
 
@@ -238,16 +238,16 @@ exports.destroy = async (req, res) => {
     const reservation = await Reservation.findByPk(req.params.id);
     if (!reservation) {
       req.flash('error', 'Reservation not found');
-      return res.redirect('/reservations');
+      return res.redirect('/admin/reservations');
     }
 
     await reservation.destroy();
     req.flash('success', 'Reservation deleted successfully');
-    res.redirect('/reservations');
+    res.redirect('/admin/reservations');
   } catch (error) {
     console.error('Reservation delete error:', error);
     req.flash('error', 'Error deleting reservation');
-    res.redirect('/reservations');
+    res.redirect('/admin/reservations');
   }
 };
 
@@ -283,7 +283,7 @@ exports.todayView = async (req, res) => {
   } catch (error) {
     console.error('Today view error:', error);
     req.flash('error', 'Error loading today\'s reservations');
-    res.redirect('/dashboard');
+    res.redirect('/admin/dashboard');
   }
 };
 
@@ -323,7 +323,7 @@ exports.calendar = async (req, res) => {
   } catch (error) {
     console.error('Calendar error:', error);
     req.flash('error', 'Error loading calendar');
-    res.redirect('/dashboard');
+    res.redirect('/admin/dashboard');
   }
 };
 
@@ -428,6 +428,6 @@ exports.reports = async (req, res) => {
   } catch (error) {
     console.error('Reports error:', error);
     req.flash('error', 'Error loading reports');
-    res.redirect('/dashboard');
+    res.redirect('/admin/dashboard');
   }
 };

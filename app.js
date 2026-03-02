@@ -10,6 +10,7 @@ const { sequelize } = require('./models');
 const { setLocals } = require('./middlewares/auth');
 
 // Import routes
+const publicRoutes = require('./routes/public');
 const authRoutes = require('./routes/auth');
 const dashboardRoutes = require('./routes/dashboard');
 const reservationRoutes = require('./routes/reservations');
@@ -48,13 +49,16 @@ app.use(flash());
 // Set Locals (restaurant info, admin, flash messages)
 app.use(setLocals);
 
-// Routes
-app.get('/', (req, res) => res.redirect('/dashboard'));
-app.use('/auth', authRoutes);
-app.use('/dashboard', dashboardRoutes);
-app.use('/reservations', reservationRoutes);
-app.use('/tables', tableRoutes);
-app.use('/settings', settingsRoutes);
+// Public Routes
+app.use('/', publicRoutes);
+
+// Admin Routes (under /admin prefix)
+app.get('/admin', (req, res) => res.redirect('/admin/dashboard'));
+app.use('/admin/auth', authRoutes);
+app.use('/admin/dashboard', dashboardRoutes);
+app.use('/admin/reservations', reservationRoutes);
+app.use('/admin/tables', tableRoutes);
+app.use('/admin/settings', settingsRoutes);
 
 // 404 Handler
 app.use((req, res) => {
@@ -86,8 +90,9 @@ async function startServer() {
 
     app.listen(PORT, () => {
       console.log(`\n========================================`);
-      console.log(`  ${process.env.RESTAURANT_NAME || 'Restaurant'} Admin Panel`);
-      console.log(`  Running on http://localhost:${PORT}`);
+      console.log(`  ${process.env.RESTAURANT_NAME || 'Restaurant'}`);
+      console.log(`  Website: http://localhost:${PORT}`);
+      console.log(`  Admin:   http://localhost:${PORT}/admin`);
       console.log(`========================================\n`);
     });
   } catch (error) {

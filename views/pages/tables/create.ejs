@@ -1,13 +1,13 @@
 <div class="d-flex justify-content-between align-items-center mb-4">
   <h3 class="fw-bold mb-0">Add New Table</h3>
-  <a href="/tables" class="btn btn-outline-secondary"><i class="bi bi-arrow-left me-1"></i>Back</a>
+  <a href="/admin/tables" class="btn btn-outline-secondary"><i class="bi bi-arrow-left me-1"></i>Back</a>
 </div>
 
 <div class="row justify-content-center">
   <div class="col-lg-6">
     <div class="card border-0 shadow-sm">
       <div class="card-body">
-        <form action="/tables" method="POST">
+        <form action="/admin/tables" method="POST">
           <div class="mb-3">
             <label class="form-label">Table Number <span class="text-danger">*</span></label>
             <input type="text" name="table_number" class="form-control" placeholder="e.g., T1, A1, 101" required>
@@ -24,7 +24,7 @@
                 <option value="<%= loc.id %>"><%= loc.name %></option>
               <% }); %>
             </select>
-            <small class="form-text text-muted">Manage locations in <a href="/settings/locations">Settings &rarr; Locations</a></small>
+            <small class="form-text text-muted">Manage locations in <a href="/admin/settings/locations">Settings &rarr; Locations</a></small>
           </div>
           <div class="mb-3">
             <label class="form-label">Status</label>
@@ -38,7 +38,7 @@
             <textarea name="description" class="form-control" rows="3" placeholder="Optional description..."></textarea>
           </div>
           <button type="submit" class="btn btn-primary"><i class="bi bi-check-lg me-1"></i>Add Table</button>
-          <a href="/tables" class="btn btn-outline-secondary ms-2">Cancel</a>
+          <a href="/admin/tables" class="btn btn-outline-secondary ms-2">Cancel</a>
         </form>
       </div>
     </div>

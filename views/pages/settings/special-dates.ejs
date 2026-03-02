@@ -5,10 +5,10 @@
 <div class="row">
   <div class="col-lg-3 mb-4">
     <div class="list-group shadow-sm">
-      <a href="/settings" class="list-group-item list-group-item-action"><i class="bi bi-gear me-2"></i>General</a>
-      <a href="/settings/hours" class="list-group-item list-group-item-action"><i class="bi bi-clock me-2"></i>Operating Hours</a>
-      <a href="/settings/special-dates" class="list-group-item list-group-item-action active"><i class="bi bi-calendar-event me-2"></i>Special Dates</a>
-      <a href="/settings/staff" class="list-group-item list-group-item-action"><i class="bi bi-people me-2"></i>Staff</a>
+      <a href="/admin/settings" class="list-group-item list-group-item-action"><i class="bi bi-gear me-2"></i>General</a>
+      <a href="/admin/settings/hours" class="list-group-item list-group-item-action"><i class="bi bi-clock me-2"></i>Operating Hours</a>
+      <a href="/admin/settings/special-dates" class="list-group-item list-group-item-action active"><i class="bi bi-calendar-event me-2"></i>Special Dates</a>
+      <a href="/admin/settings/staff" class="list-group-item list-group-item-action"><i class="bi bi-people me-2"></i>Staff</a>
     </div>
   </div>
 
@@ -17,7 +17,7 @@
     <div class="card border-0 shadow-sm mb-4">
       <div class="card-header bg-white"><h6 class="fw-bold mb-0">Add Special Date</h6></div>
       <div class="card-body">
-        <form action="/settings/special-dates" method="POST">
+        <form action="/admin/settings/special-dates" method="POST">
           <div class="row g-3">
             <div class="col-md-3">
               <label class="form-label">Date <span class="text-danger">*</span></label>
@@ -92,7 +92,7 @@
                     </td>
                     <td><%= sd.notes || '-' %></td>
                     <td>
-                      <form action="/settings/special-dates/<%= sd.id %>?_method=DELETE" method="POST" class="d-inline" onsubmit="return confirm('Remove this special date?')">
+                      <form action="/admin/settings/special-dates/<%= sd.id %>?_method=DELETE" method="POST" class="d-inline" onsubmit="return confirm('Remove this special date?')">
                         <input type="hidden" name="_method" value="DELETE">
                         <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
                       </form>

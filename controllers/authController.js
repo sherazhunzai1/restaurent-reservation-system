@@ -1,7 +1,7 @@
 const { Admin } = require('../models');
 
 exports.loginPage = (req, res) => {
-  if (req.session.admin) return res.redirect('/dashboard');
+  if (req.session.admin) return res.redirect('/admin/dashboard');
   res.render('pages/login', { layout: false });
 };
 
@@ -14,7 +14,7 @@ exports.login = async (req, res) => {
 
     if (!admin || !(await admin.validatePassword(password))) {
       req.flash('error', 'Invalid username or password');
-      return res.redirect('/auth/login');
+      return res.redirect('/admin/auth/login');
     }
 
     await admin.update({ last_login: new Date() });
@@ -28,18 +28,18 @@ exports.login = async (req, res) => {
     };
 
     req.flash('success', `Welcome back, ${admin.full_name}!`);
-    res.redirect('/dashboard');
+    res.redirect('/admin/dashboard');
   } catch (error) {
     console.error('Login error:', error);
     req.flash('error', 'An error occurred during login');
-    res.redirect('/auth/login');
+    res.redirect('/admin/auth/login');
   }
 };
 
 exports.logout = (req, res) => {
   req.session.destroy((err) => {
     if (err) console.error('Session destroy error:', err);
-    res.redirect('/auth/login');
+    res.redirect('/admin/auth/login');
   });
 };
 
@@ -50,7 +50,7 @@ exports.profilePage = async (req, res) => {
   } catch (error) {
     console.error('Profile error:', error);
     req.flash('error', 'Error loading profile');
-    res.redirect('/dashboard');
+    res.redirect('/admin/dashboard');
   }
 };
 
@@ -62,11 +62,11 @@ exports.updateProfile = async (req, res) => {
     req.session.admin.full_name = full_name;
     req.session.admin.email = email;
     req.flash('success', 'Profile updated successfully');
-    res.redirect('/auth/profile');
+    res.redirect('/admin/auth/profile');
   } catch (error) {
     console.error('Profile update error:', error);
     req.flash('error', 'Error updating profile');
-    res.redirect('/auth/profile');
+    res.redirect('/admin/auth/profile');
   }
 };
 
@@ -77,25 +77,25 @@ exports.changePassword = async (req, res) => {
 
     if (!(await admin.validatePassword(current_password))) {
       req.flash('error', 'Current password is incorrect');
-      return res.redirect('/auth/profile');
+      return res.redirect('/admin/auth/profile');
     }
 
     if (new_password !== confirm_password) {
       req.flash('error', 'New passwords do not match');
-      return res.redirect('/auth/profile');
+      return res.redirect('/admin/auth/profile');
     }
 
     if (new_password.length < 6) {
       req.flash('error', 'Password must be at least 6 characters');
-      return res.redirect('/auth/profile');
+      return res.redirect('/admin/auth/profile');
     }
 
     await admin.update({ password: new_password });
     req.flash('success', 'Password changed successfully');
-    res.redirect('/auth/profile');
+    res.redirect('/admin/auth/profile');
   } catch (error) {
     console.error('Change password error:', error);
     req.flash('error', 'Error changing password');
-    res.redirect('/auth/profile');
+    res.redirect('/admin/auth/profile');
   }
 };
