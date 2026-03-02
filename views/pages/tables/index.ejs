@@ -1,0 +1,49 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h3 class="fw-bold mb-0">Table Management</h3>
+  <a href="/tables/create" class="btn btn-primary"><i class="bi bi-plus-lg me-1"></i>Add Table</a>
+</div>
+
+<div class="row g-3">
+  <% if (tables.length === 0) { %>
+    <div class="col-12">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body text-center py-5">
+          <i class="bi bi-grid-3x3 fs-1 text-muted"></i>
+          <h5 class="mt-3">No Tables Yet</h5>
+          <p class="text-muted">Start by adding tables to your restaurant.</p>
+          <a href="/tables/create" class="btn btn-primary">Add First Table</a>
+        </div>
+      </div>
+    </div>
+  <% } else { %>
+    <% tables.forEach(function(table) { %>
+      <div class="col-xl-3 col-md-4 col-sm-6">
+        <div class="card border-0 shadow-sm h-100 table-card">
+          <div class="card-body text-center">
+            <div class="table-icon mb-3 mx-auto bg-<%= table.status === 'available' ? 'success' : table.status === 'reserved' ? 'warning' : table.status === 'occupied' ? 'danger' : 'secondary' %>-subtle text-<%= table.status === 'available' ? 'success' : table.status === 'reserved' ? 'warning' : table.status === 'occupied' ? 'danger' : 'secondary' %>">
+              <i class="bi bi-<%= table.location === 'outdoor' ? 'tree' : table.location === 'private_room' ? 'door-closed' : table.location === 'bar' ? 'cup-straw' : table.location === 'patio' ? 'sun' : 'grid' %>"></i>
+            </div>
+            <h5 class="fw-bold mb-1">Table <%= table.table_number %></h5>
+            <p class="text-muted mb-2"><i class="bi bi-people me-1"></i><%= table.capacity %> seats | <%= table.location %></p>
+            <span class="badge bg-<%= table.status === 'available' ? 'success' : table.status === 'reserved' ? 'warning' : table.status === 'occupied' ? 'danger' : 'secondary' %> mb-2">
+              <%= table.status %>
+            </span>
+            <% if (!table.is_active) { %>
+              <span class="badge bg-dark mb-2">Inactive</span>
+            <% } %>
+            <% if (tableReservationCounts[table.id]) { %>
+              <div class="mt-1"><small class="text-info"><i class="bi bi-calendar-check me-1"></i><%= tableReservationCounts[table.id] %> reservations today</small></div>
+            <% } %>
+          </div>
+          <div class="card-footer bg-white border-top text-center">
+            <a href="/tables/<%= table.id %>/edit" class="btn btn-sm btn-outline-primary me-1"><i class="bi bi-pencil"></i> Edit</a>
+            <form action="/tables/<%= table.id %>?_method=DELETE" method="POST" class="d-inline" onsubmit="return confirm('Delete table <%= table.table_number %>?')">
+              <input type="hidden" name="_method" value="DELETE">
+              <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i> Delete</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    <% }); %>
+  <% } %>
+</div>

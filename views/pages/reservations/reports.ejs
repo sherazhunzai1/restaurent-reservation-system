@@ -1,0 +1,142 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h3 class="fw-bold mb-0">Reports & Analytics</h3>
+</div>
+
+<!-- Period Selector -->
+<div class="card border-0 shadow-sm mb-4">
+  <div class="card-body">
+    <form method="GET" action="/reservations/reports" class="row g-3 align-items-end">
+      <div class="col-md-3">
+        <label class="form-label small fw-medium">Period</label>
+        <select name="period" class="form-select form-select-sm">
+          <option value="daily" <%= period === 'daily' ? 'selected' : '' %>>Daily (This Month)</option>
+          <option value="monthly" <%= period === 'monthly' ? 'selected' : '' %>>Monthly</option>
+          <option value="yearly" <%= period === 'yearly' ? 'selected' : '' %>>Yearly</option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <label class="form-label small fw-medium">Year</label>
+        <select name="year" class="form-select form-select-sm">
+          <% for (let y = moment().year(); y >= moment().year() - 5; y--) { %>
+            <option value="<%= y %>" <%= year === y ? 'selected' : '' %>><%= y %></option>
+          <% } %>
+        </select>
+      </div>
+      <div class="col-md-2">
+        <button type="submit" class="btn btn-sm btn-primary"><i class="bi bi-funnel me-1"></i>Generate</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="row g-4">
+  <!-- Chart -->
+  <div class="col-lg-8">
+    <div class="card border-0 shadow-sm h-100">
+      <div class="card-body">
+        <h6 class="fw-bold mb-3">
+          <%= period === 'daily' ? 'Daily Reservations This Month' : period === 'monthly' ? 'Monthly Reservations ' + year : 'Yearly Reservations' %>
+        </h6>
+        <canvas id="reportChart" height="300"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Source Distribution -->
+  <div class="col-lg-4">
+    <div class="card border-0 shadow-sm h-100">
+      <div class="card-body">
+        <h6 class="fw-bold mb-3">Reservation Sources (<%= year %>)</h6>
+        <canvas id="sourceChart" height="300"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Data Table -->
+<div class="card border-0 shadow-sm mt-4">
+  <div class="card-header bg-white"><h6 class="fw-bold mb-0">Detailed Breakdown</h6></div>
+  <div class="card-body p-0">
+    <div class="table-responsive">
+      <table class="table table-hover mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>Period</th>
+            <th class="text-end">Total Reservations</th>
+            <th class="text-end">Total Guests</th>
+            <% if (period === 'monthly') { %>
+              <th class="text-end">Cancelled</th>
+              <th class="text-end">No Shows</th>
+            <% } %>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (reportData.length === 0) { %>
+            <tr><td colspan="5" class="text-center text-muted py-4">No data available</td></tr>
+          <% } else { %>
+            <% reportData.forEach(function(row) { %>
+              <tr>
+                <td class="fw-medium"><%= row.label || row.reservation_date %></td>
+                <td class="text-end"><%= row.total %></td>
+                <td class="text-end"><%= row.guests || 0 %></td>
+                <% if (period === 'monthly') { %>
+                  <td class="text-end text-danger"><%= row.cancelled || 0 %></td>
+                  <td class="text-end text-secondary"><%= row.noShow || 0 %></td>
+                <% } %>
+              </tr>
+            <% }); %>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const reportData = <%- JSON.stringify(reportData) %>;
+  const reportCtx = document.getElementById('reportChart');
+  if (reportCtx && reportData.length > 0) {
+    new Chart(reportCtx, {
+      type: 'bar',
+      data: {
+        labels: reportData.map(d => d.label || d.reservation_date),
+        datasets: [{
+          label: 'Reservations',
+          data: reportData.map(d => d.total),
+          backgroundColor: 'rgba(233, 69, 96, 0.7)',
+          borderColor: '#e94560',
+          borderWidth: 1,
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
+      }
+    });
+  }
+
+  const sourceData = <%- JSON.stringify(sourceStats) %>;
+  const sourceCtx = document.getElementById('sourceChart');
+  if (sourceCtx && sourceData.length > 0) {
+    const colors = { admin: '#0d6efd', phone: '#198754', online: '#e94560', walk_in: '#ffc107' };
+    new Chart(sourceCtx, {
+      type: 'pie',
+      data: {
+        labels: sourceData.map(d => d.source),
+        datasets: [{
+          data: sourceData.map(d => d.count),
+          backgroundColor: sourceData.map(d => colors[d.source] || '#6c757d'),
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { position: 'bottom' } }
+      }
+    });
+  }
+});
+</script>

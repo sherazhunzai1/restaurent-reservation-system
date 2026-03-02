@@ -1,0 +1,87 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h3 class="fw-bold mb-0">New Reservation</h3>
+  <a href="/reservations" class="btn btn-outline-secondary"><i class="bi bi-arrow-left me-1"></i>Back</a>
+</div>
+
+<div class="card border-0 shadow-sm">
+  <div class="card-body">
+    <form action="/reservations" method="POST">
+      <div class="row g-3">
+        <!-- Customer Info -->
+        <div class="col-12"><h6 class="fw-bold text-primary border-bottom pb-2">Customer Information</h6></div>
+        <div class="col-md-4">
+          <label class="form-label">Customer Name <span class="text-danger">*</span></label>
+          <input type="text" name="customer_name" class="form-control" required>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Email</label>
+          <input type="email" name="customer_email" class="form-control">
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Phone <span class="text-danger">*</span></label>
+          <input type="tel" name="customer_phone" class="form-control" required>
+        </div>
+
+        <!-- Reservation Details -->
+        <div class="col-12 mt-4"><h6 class="fw-bold text-primary border-bottom pb-2">Reservation Details</h6></div>
+        <div class="col-md-3">
+          <label class="form-label">Date <span class="text-danger">*</span></label>
+          <input type="date" name="reservation_date" class="form-control" value="<%= moment().format('YYYY-MM-DD') %>" required>
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">Time <span class="text-danger">*</span></label>
+          <input type="time" name="reservation_time" class="form-control" required>
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">End Time</label>
+          <input type="time" name="end_time" class="form-control">
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">Party Size <span class="text-danger">*</span></label>
+          <input type="number" name="party_size" class="form-control" min="1" max="50" value="2" required>
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label">Table</label>
+          <select name="table_id" class="form-select">
+            <option value="">-- No table assigned --</option>
+            <% tables.forEach(function(t) { %>
+              <option value="<%= t.id %>">Table <%= t.table_number %> (Seats <%= t.capacity %>, <%= t.location %>)</option>
+            <% }); %>
+          </select>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Status</label>
+          <select name="status" class="form-select">
+            <option value="pending">Pending</option>
+            <option value="confirmed">Confirmed</option>
+          </select>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Source</label>
+          <select name="source" class="form-select">
+            <option value="admin">Admin</option>
+            <option value="phone">Phone</option>
+            <option value="online">Online</option>
+            <option value="walk_in">Walk-in</option>
+          </select>
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label">Special Requests</label>
+          <textarea name="special_requests" class="form-control" rows="3" placeholder="Any special requests from the customer..."></textarea>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Internal Notes</label>
+          <textarea name="notes" class="form-control" rows="3" placeholder="Staff notes..."></textarea>
+        </div>
+
+        <div class="col-12">
+          <hr>
+          <button type="submit" class="btn btn-primary"><i class="bi bi-check-lg me-1"></i>Create Reservation</button>
+          <a href="/reservations" class="btn btn-outline-secondary ms-2">Cancel</a>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

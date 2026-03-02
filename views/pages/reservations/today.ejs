@@ -1,0 +1,113 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <div>
+    <h3 class="fw-bold mb-1">Today's Reservations</h3>
+    <p class="text-muted mb-0"><%= moment(today).format('dddd, MMMM D, YYYY') %></p>
+  </div>
+  <a href="/reservations/create" class="btn btn-primary"><i class="bi bi-plus-lg me-1"></i>New Reservation</a>
+</div>
+
+<!-- Quick Stats -->
+<div class="row g-3 mb-4">
+  <div class="col-md-3">
+    <div class="card border-0 shadow-sm text-center">
+      <div class="card-body py-3">
+        <h3 class="fw-bold text-primary mb-0"><%= stats.total %></h3>
+        <small class="text-muted">Total</small>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card border-0 shadow-sm text-center">
+      <div class="card-body py-3">
+        <h3 class="fw-bold text-success mb-0"><%= stats.confirmed %></h3>
+        <small class="text-muted">Confirmed</small>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card border-0 shadow-sm text-center">
+      <div class="card-body py-3">
+        <h3 class="fw-bold text-warning mb-0"><%= stats.pending %></h3>
+        <small class="text-muted">Pending</small>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card border-0 shadow-sm text-center">
+      <div class="card-body py-3">
+        <h3 class="fw-bold text-info mb-0"><%= stats.totalGuests %></h3>
+        <small class="text-muted">Expected Guests</small>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Reservations Timeline -->
+<div class="card border-0 shadow-sm">
+  <div class="card-body p-0">
+    <div class="table-responsive">
+      <table class="table table-hover mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>Time</th>
+            <th>Code</th>
+            <th>Customer</th>
+            <th>Party</th>
+            <th>Table</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (reservations.length === 0) { %>
+            <tr><td colspan="7" class="text-center text-muted py-4">No reservations for today</td></tr>
+          <% } else { %>
+            <% reservations.forEach(function(r) { %>
+              <tr>
+                <td class="fw-medium"><%= r.reservation_time %><%= r.end_time ? ' - ' + r.end_time : '' %></td>
+                <td><a href="/reservations/<%= r.id %>" class="text-decoration-none"><%= r.reservation_code %></a></td>
+                <td>
+                  <div class="fw-medium"><%= r.customer_name %></div>
+                  <small class="text-muted"><%= r.customer_phone %></small>
+                </td>
+                <td><i class="bi bi-people me-1"></i><%= r.party_size %></td>
+                <td><%= r.table ? 'Table ' + r.table.table_number : '-' %></td>
+                <td>
+                  <span class="badge bg-<%= r.status === 'confirmed' ? 'primary' : r.status === 'pending' ? 'warning' : r.status === 'seated' ? 'info' : r.status === 'completed' ? 'success' : r.status === 'cancelled' ? 'danger' : 'secondary' %>">
+                    <%= r.status %>
+                  </span>
+                </td>
+                <td>
+                  <div class="btn-group btn-group-sm">
+                    <% if (r.status === 'pending') { %>
+                      <form action="/reservations/<%= r.id %>/status" method="POST" class="d-inline">
+                        <input type="hidden" name="_method" value="PATCH">
+                        <input type="hidden" name="status" value="confirmed">
+                        <button class="btn btn-outline-primary" title="Confirm"><i class="bi bi-check"></i></button>
+                      </form>
+                    <% } %>
+                    <% if (r.status === 'confirmed') { %>
+                      <form action="/reservations/<%= r.id %>/status" method="POST" class="d-inline">
+                        <input type="hidden" name="_method" value="PATCH">
+                        <input type="hidden" name="status" value="seated">
+                        <button class="btn btn-outline-info" title="Seat"><i class="bi bi-box-arrow-in-down"></i></button>
+                      </form>
+                    <% } %>
+                    <% if (r.status === 'seated') { %>
+                      <form action="/reservations/<%= r.id %>/status" method="POST" class="d-inline">
+                        <input type="hidden" name="_method" value="PATCH">
+                        <input type="hidden" name="status" value="completed">
+                        <button class="btn btn-outline-success" title="Complete"><i class="bi bi-check2-all"></i></button>
+                      </form>
+                    <% } %>
+                    <a href="/reservations/<%= r.id %>" class="btn btn-outline-secondary" title="View"><i class="bi bi-eye"></i></a>
+                  </div>
+                </td>
+              </tr>
+            <% }); %>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

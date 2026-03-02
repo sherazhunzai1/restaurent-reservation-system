@@ -1,0 +1,94 @@
+<div class="sidebar bg-dark" id="sidebar">
+  <div class="sidebar-header text-center py-4 px-3">
+    <a href="/dashboard" class="text-decoration-none">
+      <img src="<%= restaurant.logo %>" alt="<%= restaurant.name %>" class="sidebar-logo mb-2" onerror="this.style.display='none'">
+      <h5 class="text-white mb-0 sidebar-title"><%= restaurant.name %></h5>
+      <small class="text-muted"><%= restaurant.tagline %></small>
+    </a>
+  </div>
+
+  <hr class="text-secondary mx-3 my-0">
+
+  <nav class="sidebar-nav px-3 py-3">
+    <ul class="nav flex-column">
+      <li class="nav-item">
+        <a class="nav-link sidebar-link <%= currentPath === '/dashboard' ? 'active' : '' %>" href="/dashboard">
+          <i class="bi bi-speedometer2"></i>
+          <span>Dashboard</span>
+        </a>
+      </li>
+
+      <li class="nav-item mt-2">
+        <small class="text-uppercase text-muted fw-bold px-3 d-block mb-1">Reservations</small>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link sidebar-link <%= currentPath === '/reservations/today' ? 'active' : '' %>" href="/reservations/today">
+          <i class="bi bi-calendar-check"></i>
+          <span>Today's Reservations</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link sidebar-link <%= currentPath === '/reservations' ? 'active' : '' %>" href="/reservations">
+          <i class="bi bi-journal-text"></i>
+          <span>All Reservations</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link sidebar-link <%= currentPath === '/reservations/create' ? 'active' : '' %>" href="/reservations/create">
+          <i class="bi bi-plus-circle"></i>
+          <span>New Reservation</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link sidebar-link <%= currentPath === '/reservations/calendar' ? 'active' : '' %>" href="/reservations/calendar">
+          <i class="bi bi-calendar3"></i>
+          <span>Calendar View</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link sidebar-link <%= currentPath === '/reservations/reports' ? 'active' : '' %>" href="/reservations/reports">
+          <i class="bi bi-bar-chart"></i>
+          <span>Reports</span>
+        </a>
+      </li>
+
+      <li class="nav-item mt-2">
+        <small class="text-uppercase text-muted fw-bold px-3 d-block mb-1">Management</small>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link sidebar-link <%= currentPath === '/tables' ? 'active' : '' %>" href="/tables">
+          <i class="bi bi-grid-3x3"></i>
+          <span>Tables</span>
+        </a>
+      </li>
+
+      <li class="nav-item mt-2">
+        <small class="text-uppercase text-muted fw-bold px-3 d-block mb-1">Settings</small>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link sidebar-link <%= currentPath === '/settings' ? 'active' : '' %>" href="/settings">
+          <i class="bi bi-gear"></i>
+          <span>General Settings</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link sidebar-link <%= currentPath === '/settings/hours' ? 'active' : '' %>" href="/settings/hours">
+          <i class="bi bi-clock"></i>
+          <span>Operating Hours</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link sidebar-link <%= currentPath === '/settings/special-dates' ? 'active' : '' %>" href="/settings/special-dates">
+          <i class="bi bi-calendar-event"></i>
+          <span>Special Dates</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link sidebar-link <%= currentPath === '/settings/staff' ? 'active' : '' %>" href="/settings/staff">
+          <i class="bi bi-people"></i>
+          <span>Staff</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+</div>
