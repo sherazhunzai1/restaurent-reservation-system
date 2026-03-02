@@ -1,6 +1,6 @@
 const { Op } = require('sequelize');
 const moment = require('moment');
-const { Reservation, Table, sequelize } = require('../models');
+const { Reservation, Table, TableLocation, sequelize } = require('../models');
 
 exports.index = async (req, res) => {
   try {
@@ -75,7 +75,7 @@ exports.index = async (req, res) => {
         reservation_date: { [Op.gte]: today },
         status: { [Op.in]: ['pending', 'confirmed'] },
       },
-      include: [{ model: Table, as: 'table' }],
+      include: [{ model: Table, as: 'table', include: [{ model: TableLocation, as: 'location' }] }],
       order: [['reservation_date', 'ASC'], ['reservation_time', 'ASC']],
       limit: 10,
     });

@@ -1,6 +1,6 @@
 const { Op } = require('sequelize');
 const moment = require('moment');
-const { Reservation, Table, Admin } = require('../models');
+const { Reservation, Table, Admin, TableLocation } = require('../models');
 
 function generateReservationCode() {
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -42,7 +42,7 @@ exports.index = async (req, res) => {
     const { rows: reservations, count: total } = await Reservation.findAndCountAll({
       where,
       include: [
-        { model: Table, as: 'table' },
+        { model: Table, as: 'table', include: [{ model: TableLocation, as: 'location' }] },
         { model: Admin, as: 'creator', attributes: ['full_name'] },
       ],
       order: [['reservation_date', 'DESC'], ['reservation_time', 'ASC']],
@@ -75,6 +75,7 @@ exports.create = async (req, res) => {
   try {
     const tables = await Table.findAll({
       where: { is_active: true },
+      include: [{ model: TableLocation, as: 'location' }],
       order: [['table_number', 'ASC']],
     });
     res.render('pages/reservations/create', {
@@ -127,7 +128,7 @@ exports.show = async (req, res) => {
   try {
     const reservation = await Reservation.findByPk(req.params.id, {
       include: [
-        { model: Table, as: 'table' },
+        { model: Table, as: 'table', include: [{ model: TableLocation, as: 'location' }] },
         { model: Admin, as: 'creator', attributes: ['full_name'] },
       ],
     });
@@ -159,6 +160,7 @@ exports.edit = async (req, res) => {
 
     const tables = await Table.findAll({
       where: { is_active: true },
+      include: [{ model: TableLocation, as: 'location' }],
       order: [['table_number', 'ASC']],
     });
 
@@ -254,7 +256,7 @@ exports.todayView = async (req, res) => {
     const today = moment().format('YYYY-MM-DD');
     const reservations = await Reservation.findAll({
       where: { reservation_date: today },
-      include: [{ model: Table, as: 'table' }],
+      include: [{ model: Table, as: 'table', include: [{ model: TableLocation, as: 'location' }] }],
       order: [['reservation_time', 'ASC']],
     });
 

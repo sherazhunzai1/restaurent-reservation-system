@@ -1,10 +1,11 @@
-const { Table, Reservation } = require('../models');
+const { Table, Reservation, TableLocation } = require('../models');
 const { Op } = require('sequelize');
 const moment = require('moment');
 
 exports.index = async (req, res) => {
   try {
     const tables = await Table.findAll({
+      include: [{ model: TableLocation, as: 'location' }],
       order: [['table_number', 'ASC']],
     });
 
@@ -37,17 +38,18 @@ exports.index = async (req, res) => {
   }
 };
 
-exports.create = (req, res) => {
-  res.render('pages/tables/create', { title: 'Add Table' });
+exports.create = async (req, res) => {
+  const locations = await TableLocation.findAll({ where: { is_active: true }, order: [['name', 'ASC']] });
+  res.render('pages/tables/create', { title: 'Add Table', locations });
 };
 
 exports.store = async (req, res) => {
   try {
-    const { table_number, capacity, location, status, description } = req.body;
+    const { table_number, capacity, location_id, status, description } = req.body;
     await Table.create({
       table_number,
       capacity: parseInt(capacity),
-      location: location || 'indoor',
+      location_id: location_id || null,
       status: status || 'available',
       description: description || null,
     });
@@ -62,12 +64,15 @@ exports.store = async (req, res) => {
 
 exports.edit = async (req, res) => {
   try {
-    const table = await Table.findByPk(req.params.id);
+    const table = await Table.findByPk(req.params.id, {
+      include: [{ model: TableLocation, as: 'location' }],
+    });
     if (!table) {
       req.flash('error', 'Table not found');
       return res.redirect('/tables');
     }
-    res.render('pages/tables/edit', { title: `Edit Table ${table.table_number}`, table });
+    const locations = await TableLocation.findAll({ where: { is_active: true }, order: [['name', 'ASC']] });
+    res.render('pages/tables/edit', { title: `Edit Table ${table.table_number}`, table, locations });
   } catch (error) {
     console.error('Table edit error:', error);
     req.flash('error', 'Error loading table');
@@ -83,11 +88,11 @@ exports.update = async (req, res) => {
       return res.redirect('/tables');
     }
 
-    const { table_number, capacity, location, status, is_active, description } = req.body;
+    const { table_number, capacity, location_id, status, is_active, description } = req.body;
     await table.update({
       table_number,
       capacity: parseInt(capacity),
-      location,
+      location_id: location_id || null,
       status,
       is_active: is_active === 'true' || is_active === '1',
       description: description || null,

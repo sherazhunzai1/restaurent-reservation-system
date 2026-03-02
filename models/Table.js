@@ -17,9 +17,13 @@ const Table = sequelize.define('Table', {
     allowNull: false,
     validate: { min: 1, max: 50 },
   },
-  location: {
-    type: DataTypes.ENUM('indoor', 'outdoor', 'private_room', 'bar', 'patio'),
-    defaultValue: 'indoor',
+  location_id: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+    references: {
+      model: 'table_locations',
+      key: 'id',
+    },
   },
   status: {
     type: DataTypes.ENUM('available', 'occupied', 'reserved', 'maintenance'),

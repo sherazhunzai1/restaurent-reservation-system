@@ -46,7 +46,7 @@
           <select name="table_id" class="form-select">
             <option value="">-- No table assigned --</option>
             <% tables.forEach(function(t) { %>
-              <option value="<%= t.id %>">Table <%= t.table_number %> (Seats <%= t.capacity %>, <%= t.location %>)</option>
+              <option value="<%= t.id %>">Table <%= t.table_number %> (Seats <%= t.capacity %><%= t.location ? ', ' + t.location.name : '' %>)</option>
             <% }); %>
           </select>
         </div>

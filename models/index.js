@@ -5,8 +5,12 @@ const Reservation = require('./Reservation');
 const RestaurantSettings = require('./RestaurantSettings');
 const OperatingHours = require('./OperatingHours');
 const SpecialDate = require('./SpecialDate');
+const TableLocation = require('./TableLocation');
 
 // Associations
+TableLocation.hasMany(Table, { foreignKey: 'location_id', as: 'tables' });
+Table.belongsTo(TableLocation, { foreignKey: 'location_id', as: 'location' });
+
 Table.hasMany(Reservation, { foreignKey: 'table_id', as: 'reservations' });
 Reservation.belongsTo(Table, { foreignKey: 'table_id', as: 'table' });
 
@@ -21,4 +25,5 @@ module.exports = {
   RestaurantSettings,
   OperatingHours,
   SpecialDate,
+  TableLocation,
 };

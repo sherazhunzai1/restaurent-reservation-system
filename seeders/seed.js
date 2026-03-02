@@ -1,5 +1,5 @@
 require('dotenv').config();
-const { sequelize, Admin, Table, Reservation, RestaurantSettings, OperatingHours } = require('../models');
+const { sequelize, Admin, Table, Reservation, RestaurantSettings, OperatingHours, TableLocation } = require('../models');
 
 async function seed() {
   try {
@@ -16,18 +16,32 @@ async function seed() {
     });
     console.log('Default admin created (username: admin, password: admin123)');
 
+    // Create default table locations
+    const locationsData = [
+      { name: 'Indoor', icon: 'grid' },
+      { name: 'Outdoor', icon: 'tree' },
+      { name: 'Private Room', icon: 'door-closed' },
+      { name: 'Bar', icon: 'cup-straw' },
+      { name: 'Patio', icon: 'sun' },
+    ];
+    const locations = await TableLocation.bulkCreate(locationsData);
+    console.log('Default table locations created.');
+
+    const locMap = {};
+    locations.forEach(l => { locMap[l.name] = l.id; });
+
     // Create tables
     const tablesData = [
-      { table_number: 'T1', capacity: 2, location: 'indoor' },
-      { table_number: 'T2', capacity: 2, location: 'indoor' },
-      { table_number: 'T3', capacity: 4, location: 'indoor' },
-      { table_number: 'T4', capacity: 4, location: 'indoor' },
-      { table_number: 'T5', capacity: 6, location: 'indoor' },
-      { table_number: 'T6', capacity: 6, location: 'indoor' },
-      { table_number: 'T7', capacity: 8, location: 'private_room' },
-      { table_number: 'T8', capacity: 4, location: 'outdoor' },
-      { table_number: 'T9', capacity: 4, location: 'outdoor' },
-      { table_number: 'T10', capacity: 2, location: 'bar' },
+      { table_number: 'T1', capacity: 2, location_id: locMap['Indoor'] },
+      { table_number: 'T2', capacity: 2, location_id: locMap['Indoor'] },
+      { table_number: 'T3', capacity: 4, location_id: locMap['Indoor'] },
+      { table_number: 'T4', capacity: 4, location_id: locMap['Indoor'] },
+      { table_number: 'T5', capacity: 6, location_id: locMap['Indoor'] },
+      { table_number: 'T6', capacity: 6, location_id: locMap['Indoor'] },
+      { table_number: 'T7', capacity: 8, location_id: locMap['Private Room'] },
+      { table_number: 'T8', capacity: 4, location_id: locMap['Outdoor'] },
+      { table_number: 'T9', capacity: 4, location_id: locMap['Outdoor'] },
+      { table_number: 'T10', capacity: 2, location_id: locMap['Bar'] },
     ];
     await Table.bulkCreate(tablesData);
     console.log('Sample tables created.');
