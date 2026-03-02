@@ -1,0 +1,68 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h3 class="fw-bold mb-0">General Settings</h3>
+</div>
+
+<div class="row">
+  <div class="col-lg-3 mb-4">
+    <div class="list-group shadow-sm">
+      <a href="/settings" class="list-group-item list-group-item-action active"><i class="bi bi-gear me-2"></i>General</a>
+      <a href="/settings/hours" class="list-group-item list-group-item-action"><i class="bi bi-clock me-2"></i>Operating Hours</a>
+      <a href="/settings/special-dates" class="list-group-item list-group-item-action"><i class="bi bi-calendar-event me-2"></i>Special Dates</a>
+      <a href="/settings/staff" class="list-group-item list-group-item-action"><i class="bi bi-people me-2"></i>Staff</a>
+    </div>
+  </div>
+
+  <div class="col-lg-9">
+    <div class="card border-0 shadow-sm">
+      <div class="card-header bg-white"><h6 class="fw-bold mb-0">Reservation Settings</h6></div>
+      <div class="card-body">
+        <form action="/settings" method="POST">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">Default Reservation Duration (minutes)</label>
+              <input type="number" name="default_reservation_duration" class="form-control" value="<%= settings.default_reservation_duration %>" min="15" max="480">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Maximum Party Size</label>
+              <input type="number" name="max_party_size" class="form-control" value="<%= settings.max_party_size %>" min="1" max="100">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Minimum Advance Booking (hours)</label>
+              <input type="number" name="min_advance_booking_hours" class="form-control" value="<%= settings.min_advance_booking_hours %>" min="0">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Maximum Advance Booking (days)</label>
+              <input type="number" name="max_advance_booking_days" class="form-control" value="<%= settings.max_advance_booking_days %>" min="1">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Time Slot Interval (minutes)</label>
+              <select name="time_slot_interval" class="form-select">
+                <% [15, 30, 45, 60].forEach(function(v) { %>
+                  <option value="<%= v %>" <%= settings.time_slot_interval === v ? 'selected' : '' %>><%= v %> minutes</option>
+                <% }); %>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <div class="form-check form-switch mt-4">
+                <input class="form-check-input" type="checkbox" name="auto_confirm_reservations" id="autoConfirm" <%= settings.auto_confirm_reservations ? 'checked' : '' %>>
+                <label class="form-check-label" for="autoConfirm">Auto-confirm reservations</label>
+              </div>
+              <div class="form-check form-switch mt-2">
+                <input class="form-check-input" type="checkbox" name="allow_online_reservations" id="allowOnline" <%= settings.allow_online_reservations ? 'checked' : '' %>>
+                <label class="form-check-label" for="allowOnline">Allow online reservations</label>
+              </div>
+            </div>
+            <div class="col-12">
+              <label class="form-label">Cancellation Policy</label>
+              <textarea name="cancellation_policy" class="form-control" rows="4" placeholder="Enter your cancellation policy..."><%= settings.cancellation_policy || '' %></textarea>
+            </div>
+            <div class="col-12">
+              <hr>
+              <button type="submit" class="btn btn-primary"><i class="bi bi-check-lg me-1"></i>Save Settings</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

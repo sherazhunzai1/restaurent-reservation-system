@@ -1,0 +1,254 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <div>
+    <h3 class="fw-bold mb-1">Dashboard</h3>
+    <p class="text-muted mb-0">Welcome back, <%= admin.full_name %>!</p>
+  </div>
+  <div class="text-end">
+    <span class="text-muted"><i class="bi bi-calendar3 me-1"></i><%= moment().format('dddd, MMMM D, YYYY') %></span>
+  </div>
+</div>
+
+<!-- Today's Stats -->
+<div class="row g-3 mb-4">
+  <div class="col-xl-3 col-md-6">
+    <div class="card stat-card border-0 shadow-sm h-100">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-start">
+          <div>
+            <p class="text-muted mb-1 small">Today's Reservations</p>
+            <h3 class="fw-bold mb-0"><%= today.total %></h3>
+            <small class="text-success"><%= today.guests %> guests expected</small>
+          </div>
+          <div class="stat-icon bg-primary-subtle text-primary">
+            <i class="bi bi-calendar-check"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-xl-3 col-md-6">
+    <div class="card stat-card border-0 shadow-sm h-100">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-start">
+          <div>
+            <p class="text-muted mb-1 small">Monthly Reservations</p>
+            <h3 class="fw-bold mb-0"><%= monthly.total %></h3>
+            <small class="text-info"><%= monthly.guests %> guests</small>
+          </div>
+          <div class="stat-icon bg-info-subtle text-info">
+            <i class="bi bi-calendar-month"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-xl-3 col-md-6">
+    <div class="card stat-card border-0 shadow-sm h-100">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-start">
+          <div>
+            <p class="text-muted mb-1 small">Yearly Reservations</p>
+            <h3 class="fw-bold mb-0"><%= yearly.total %></h3>
+            <small class="text-warning"><%= yearly.guests %> guests</small>
+          </div>
+          <div class="stat-icon bg-warning-subtle text-warning">
+            <i class="bi bi-calendar-range"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-xl-3 col-md-6">
+    <div class="card stat-card border-0 shadow-sm h-100">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-start">
+          <div>
+            <p class="text-muted mb-1 small">Total Tables</p>
+            <h3 class="fw-bold mb-0"><%= tables.total %></h3>
+            <small class="text-secondary"><%= tables.capacity %> total seats</small>
+          </div>
+          <div class="stat-icon bg-success-subtle text-success">
+            <i class="bi bi-grid-3x3"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Today's Status Breakdown -->
+<div class="row g-3 mb-4">
+  <div class="col-md-12">
+    <div class="card border-0 shadow-sm">
+      <div class="card-body">
+        <h6 class="fw-bold mb-3">Today's Status Breakdown</h6>
+        <div class="row g-2 text-center">
+          <div class="col">
+            <div class="p-2 rounded bg-warning-subtle">
+              <h5 class="mb-0 fw-bold text-warning"><%= today.pending %></h5>
+              <small class="text-muted">Pending</small>
+            </div>
+          </div>
+          <div class="col">
+            <div class="p-2 rounded bg-primary-subtle">
+              <h5 class="mb-0 fw-bold text-primary"><%= today.confirmed %></h5>
+              <small class="text-muted">Confirmed</small>
+            </div>
+          </div>
+          <div class="col">
+            <div class="p-2 rounded bg-info-subtle">
+              <h5 class="mb-0 fw-bold text-info"><%= today.seated %></h5>
+              <small class="text-muted">Seated</small>
+            </div>
+          </div>
+          <div class="col">
+            <div class="p-2 rounded bg-success-subtle">
+              <h5 class="mb-0 fw-bold text-success"><%= today.completed %></h5>
+              <small class="text-muted">Completed</small>
+            </div>
+          </div>
+          <div class="col">
+            <div class="p-2 rounded bg-danger-subtle">
+              <h5 class="mb-0 fw-bold text-danger"><%= today.cancelled %></h5>
+              <small class="text-muted">Cancelled</small>
+            </div>
+          </div>
+          <div class="col">
+            <div class="p-2 rounded bg-secondary-subtle">
+              <h5 class="mb-0 fw-bold text-secondary"><%= today.noShow %></h5>
+              <small class="text-muted">No Show</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Charts Row -->
+<div class="row g-3 mb-4">
+  <div class="col-lg-8">
+    <div class="card border-0 shadow-sm h-100">
+      <div class="card-body">
+        <h6 class="fw-bold mb-3">Reservation Trend (Last 6 Months)</h6>
+        <canvas id="trendChart" height="250"></canvas>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-4">
+    <div class="card border-0 shadow-sm h-100">
+      <div class="card-body">
+        <h6 class="fw-bold mb-3">Monthly Status Distribution</h6>
+        <canvas id="statusChart" height="250"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Upcoming Reservations -->
+<div class="card border-0 shadow-sm">
+  <div class="card-header bg-white d-flex justify-content-between align-items-center">
+    <h6 class="fw-bold mb-0">Upcoming Reservations</h6>
+    <a href="/reservations" class="btn btn-sm btn-outline-primary">View All</a>
+  </div>
+  <div class="card-body p-0">
+    <div class="table-responsive">
+      <table class="table table-hover mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>Code</th>
+            <th>Customer</th>
+            <th>Date & Time</th>
+            <th>Party Size</th>
+            <th>Table</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (upcomingReservations.length === 0) { %>
+            <tr><td colspan="6" class="text-center text-muted py-4">No upcoming reservations</td></tr>
+          <% } else { %>
+            <% upcomingReservations.forEach(function(r) { %>
+              <tr>
+                <td><a href="/reservations/<%= r.id %>" class="fw-medium"><%= r.reservation_code %></a></td>
+                <td>
+                  <div class="fw-medium"><%= r.customer_name %></div>
+                  <small class="text-muted"><%= r.customer_phone %></small>
+                </td>
+                <td>
+                  <div><%= moment(r.reservation_date).format('MMM D, YYYY') %></div>
+                  <small class="text-muted"><%= r.reservation_time %></small>
+                </td>
+                <td><i class="bi bi-people me-1"></i><%= r.party_size %></td>
+                <td><%= r.table ? 'Table ' + r.table.table_number : '<span class="text-muted">Unassigned</span>' %></td>
+                <td>
+                  <span class="badge bg-<%= r.status === 'confirmed' ? 'primary' : r.status === 'pending' ? 'warning' : r.status === 'seated' ? 'info' : r.status === 'completed' ? 'success' : r.status === 'cancelled' ? 'danger' : 'secondary' %>">
+                    <%= r.status %>
+                  </span>
+                </td>
+              </tr>
+            <% }); %>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Trend Chart
+  const trendData = <%- JSON.stringify(monthlyTrend) %>;
+  const trendCtx = document.getElementById('trendChart');
+  if (trendCtx) {
+    new Chart(trendCtx, {
+      type: 'line',
+      data: {
+        labels: trendData.map(d => d.month),
+        datasets: [{
+          label: 'Reservations',
+          data: trendData.map(d => d.count),
+          borderColor: '#e94560',
+          backgroundColor: 'rgba(233, 69, 96, 0.1)',
+          fill: true,
+          tension: 0.4,
+          pointBackgroundColor: '#e94560',
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          y: { beginAtZero: true, ticks: { stepSize: 1 } }
+        }
+      }
+    });
+  }
+
+  // Status Distribution Chart
+  const statusData = <%- JSON.stringify(statusDistribution) %>;
+  const statusCtx = document.getElementById('statusChart');
+  if (statusCtx && statusData.length > 0) {
+    const colors = {
+      pending: '#ffc107', confirmed: '#0d6efd', seated: '#0dcaf0',
+      completed: '#198754', cancelled: '#dc3545', no_show: '#6c757d'
+    };
+    new Chart(statusCtx, {
+      type: 'doughnut',
+      data: {
+        labels: statusData.map(d => d.status),
+        datasets: [{
+          data: statusData.map(d => d.count),
+          backgroundColor: statusData.map(d => colors[d.status] || '#6c757d'),
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { position: 'bottom', labels: { padding: 15 } } }
+      }
+    });
+  }
+});
+</script>

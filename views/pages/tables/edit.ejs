@@ -1,0 +1,53 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h3 class="fw-bold mb-0">Edit Table <%= table.table_number %></h3>
+  <a href="/tables" class="btn btn-outline-secondary"><i class="bi bi-arrow-left me-1"></i>Back</a>
+</div>
+
+<div class="row justify-content-center">
+  <div class="col-lg-6">
+    <div class="card border-0 shadow-sm">
+      <div class="card-body">
+        <form action="/tables/<%= table.id %>?_method=PUT" method="POST">
+          <input type="hidden" name="_method" value="PUT">
+          <div class="mb-3">
+            <label class="form-label">Table Number <span class="text-danger">*</span></label>
+            <input type="text" name="table_number" class="form-control" value="<%= table.table_number %>" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Capacity (Seats) <span class="text-danger">*</span></label>
+            <input type="number" name="capacity" class="form-control" min="1" max="50" value="<%= table.capacity %>" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Location</label>
+            <select name="location" class="form-select">
+              <% ['indoor', 'outdoor', 'private_room', 'bar', 'patio'].forEach(function(loc) { %>
+                <option value="<%= loc %>" <%= table.location === loc ? 'selected' : '' %>><%= loc.replace('_', ' ') %></option>
+              <% }); %>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Status</label>
+            <select name="status" class="form-select">
+              <% ['available', 'occupied', 'reserved', 'maintenance'].forEach(function(s) { %>
+                <option value="<%= s %>" <%= table.status === s ? 'selected' : '' %>><%= s %></option>
+              <% }); %>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Active</label>
+            <select name="is_active" class="form-select">
+              <option value="true" <%= table.is_active ? 'selected' : '' %>>Active</option>
+              <option value="false" <%= !table.is_active ? 'selected' : '' %>>Inactive</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Description</label>
+            <textarea name="description" class="form-control" rows="3"><%= table.description || '' %></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary"><i class="bi bi-check-lg me-1"></i>Update Table</button>
+          <a href="/tables" class="btn btn-outline-secondary ms-2">Cancel</a>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

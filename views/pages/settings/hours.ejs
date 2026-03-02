@@ -1,0 +1,60 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h3 class="fw-bold mb-0">Operating Hours</h3>
+</div>
+
+<div class="row">
+  <div class="col-lg-3 mb-4">
+    <div class="list-group shadow-sm">
+      <a href="/settings" class="list-group-item list-group-item-action"><i class="bi bi-gear me-2"></i>General</a>
+      <a href="/settings/hours" class="list-group-item list-group-item-action active"><i class="bi bi-clock me-2"></i>Operating Hours</a>
+      <a href="/settings/special-dates" class="list-group-item list-group-item-action"><i class="bi bi-calendar-event me-2"></i>Special Dates</a>
+      <a href="/settings/staff" class="list-group-item list-group-item-action"><i class="bi bi-people me-2"></i>Staff</a>
+    </div>
+  </div>
+
+  <div class="col-lg-9">
+    <div class="card border-0 shadow-sm">
+      <div class="card-header bg-white"><h6 class="fw-bold mb-0">Weekly Schedule</h6></div>
+      <div class="card-body">
+        <form action="/settings/hours" method="POST">
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Day</th>
+                  <th class="text-center">Open</th>
+                  <th>Opening Time</th>
+                  <th>Closing Time</th>
+                  <th>Last Reservation</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% hours.forEach(function(h) { %>
+                  <tr>
+                    <td class="fw-medium align-middle"><%= h.day_name %></td>
+                    <td class="text-center align-middle">
+                      <div class="form-check form-switch d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" name="days[<%= h.id %>][is_open]" <%= h.is_open ? 'checked' : '' %>>
+                      </div>
+                    </td>
+                    <td>
+                      <input type="time" name="days[<%= h.id %>][opening_time]" class="form-control form-control-sm" value="<%= h.opening_time || '11:00' %>">
+                    </td>
+                    <td>
+                      <input type="time" name="days[<%= h.id %>][closing_time]" class="form-control form-control-sm" value="<%= h.closing_time || '22:00' %>">
+                    </td>
+                    <td>
+                      <input type="time" name="days[<%= h.id %>][last_reservation_time]" class="form-control form-control-sm" value="<%= h.last_reservation_time || '21:00' %>">
+                    </td>
+                  </tr>
+                <% }); %>
+              </tbody>
+            </table>
+          </div>
+          <hr>
+          <button type="submit" class="btn btn-primary"><i class="bi bi-check-lg me-1"></i>Save Hours</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

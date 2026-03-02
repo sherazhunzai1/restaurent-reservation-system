@@ -1,0 +1,86 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h3 class="fw-bold mb-0">Edit Reservation <%= reservation.reservation_code %></h3>
+  <a href="/reservations/<%= reservation.id %>" class="btn btn-outline-secondary"><i class="bi bi-arrow-left me-1"></i>Back</a>
+</div>
+
+<div class="card border-0 shadow-sm">
+  <div class="card-body">
+    <form action="/reservations/<%= reservation.id %>?_method=PUT" method="POST">
+      <input type="hidden" name="_method" value="PUT">
+      <div class="row g-3">
+        <div class="col-12"><h6 class="fw-bold text-primary border-bottom pb-2">Customer Information</h6></div>
+        <div class="col-md-4">
+          <label class="form-label">Customer Name <span class="text-danger">*</span></label>
+          <input type="text" name="customer_name" class="form-control" value="<%= reservation.customer_name %>" required>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Email</label>
+          <input type="email" name="customer_email" class="form-control" value="<%= reservation.customer_email || '' %>">
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Phone <span class="text-danger">*</span></label>
+          <input type="tel" name="customer_phone" class="form-control" value="<%= reservation.customer_phone %>" required>
+        </div>
+
+        <div class="col-12 mt-4"><h6 class="fw-bold text-primary border-bottom pb-2">Reservation Details</h6></div>
+        <div class="col-md-3">
+          <label class="form-label">Date <span class="text-danger">*</span></label>
+          <input type="date" name="reservation_date" class="form-control" value="<%= reservation.reservation_date %>" required>
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">Time <span class="text-danger">*</span></label>
+          <input type="time" name="reservation_time" class="form-control" value="<%= reservation.reservation_time %>" required>
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">End Time</label>
+          <input type="time" name="end_time" class="form-control" value="<%= reservation.end_time || '' %>">
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">Party Size <span class="text-danger">*</span></label>
+          <input type="number" name="party_size" class="form-control" min="1" max="50" value="<%= reservation.party_size %>" required>
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label">Table</label>
+          <select name="table_id" class="form-select">
+            <option value="">-- No table assigned --</option>
+            <% tables.forEach(function(t) { %>
+              <option value="<%= t.id %>" <%= reservation.table_id == t.id ? 'selected' : '' %>>Table <%= t.table_number %> (Seats <%= t.capacity %>)</option>
+            <% }); %>
+          </select>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Status</label>
+          <select name="status" class="form-select">
+            <% ['pending', 'confirmed', 'seated', 'completed', 'cancelled', 'no_show'].forEach(function(s) { %>
+              <option value="<%= s %>" <%= reservation.status === s ? 'selected' : '' %>><%= s.replace('_', ' ') %></option>
+            <% }); %>
+          </select>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Source</label>
+          <select name="source" class="form-select">
+            <% ['admin', 'phone', 'online', 'walk_in'].forEach(function(s) { %>
+              <option value="<%= s %>" <%= reservation.source === s ? 'selected' : '' %>><%= s.replace('_', ' ') %></option>
+            <% }); %>
+          </select>
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label">Special Requests</label>
+          <textarea name="special_requests" class="form-control" rows="3"><%= reservation.special_requests || '' %></textarea>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Internal Notes</label>
+          <textarea name="notes" class="form-control" rows="3"><%= reservation.notes || '' %></textarea>
+        </div>
+
+        <div class="col-12">
+          <hr>
+          <button type="submit" class="btn btn-primary"><i class="bi bi-check-lg me-1"></i>Update Reservation</button>
+          <a href="/reservations/<%= reservation.id %>" class="btn btn-outline-secondary ms-2">Cancel</a>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

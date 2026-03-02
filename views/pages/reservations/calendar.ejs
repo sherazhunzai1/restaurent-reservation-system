@@ -1,0 +1,65 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h3 class="fw-bold mb-0">Reservation Calendar</h3>
+</div>
+
+<div class="card border-0 shadow-sm">
+  <div class="card-header bg-white d-flex justify-content-between align-items-center">
+    <a href="/reservations/calendar?month=<%= currentMonth === 1 ? 12 : currentMonth - 1 %>&year=<%= currentMonth === 1 ? currentYear - 1 : currentYear %>" class="btn btn-outline-primary btn-sm">
+      <i class="bi bi-chevron-left"></i> Previous
+    </a>
+    <h5 class="fw-bold mb-0"><%= moment({ month: currentMonth - 1 }).format('MMMM') %> <%= currentYear %></h5>
+    <a href="/reservations/calendar?month=<%= currentMonth === 12 ? 1 : currentMonth + 1 %>&year=<%= currentMonth === 12 ? currentYear + 1 : currentYear %>" class="btn btn-outline-primary btn-sm">
+      Next <i class="bi bi-chevron-right"></i>
+    </a>
+  </div>
+  <div class="card-body p-0">
+    <table class="table table-bordered mb-0 calendar-table">
+      <thead class="table-light">
+        <tr>
+          <th class="text-center">Sun</th>
+          <th class="text-center">Mon</th>
+          <th class="text-center">Tue</th>
+          <th class="text-center">Wed</th>
+          <th class="text-center">Thu</th>
+          <th class="text-center">Fri</th>
+          <th class="text-center">Sat</th>
+        </tr>
+      </thead>
+      <tbody>
+        <%
+          const firstDay = moment({ year: currentYear, month: currentMonth - 1, day: 1 });
+          const daysInMonth = firstDay.daysInMonth();
+          const startDay = firstDay.day();
+          let day = 1;
+          const today = moment().format('YYYY-MM-DD');
+        %>
+        <% for (let week = 0; week < 6 && day <= daysInMonth; week++) { %>
+          <tr>
+            <% for (let dow = 0; dow < 7; dow++) { %>
+              <% if ((week === 0 && dow < startDay) || day > daysInMonth) { %>
+                <td class="calendar-cell bg-light"></td>
+              <% } else { %>
+                <%
+                  const dateStr = moment({ year: currentYear, month: currentMonth - 1, day: day }).format('YYYY-MM-DD');
+                  const count = calendarData[dateStr] || 0;
+                  const isToday = dateStr === today;
+                %>
+                <td class="calendar-cell <%= isToday ? 'calendar-today' : '' %>">
+                  <div class="d-flex flex-column align-items-center">
+                    <span class="calendar-day <%= isToday ? 'fw-bold text-primary' : '' %>"><%= day %></span>
+                    <% if (count > 0) { %>
+                      <a href="/reservations?date=<%= dateStr %>" class="badge bg-primary mt-1 text-decoration-none">
+                        <%= count %> res.
+                      </a>
+                    <% } %>
+                  </div>
+                </td>
+                <% day++; %>
+              <% } %>
+            <% } %>
+          </tr>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+</div>
