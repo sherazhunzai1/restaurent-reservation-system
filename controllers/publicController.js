@@ -33,11 +33,13 @@ exports.reservePage = async (req, res) => {
   try {
     const hours = await OperatingHours.findAll({ order: [['day_of_week', 'ASC']] });
     const settings = await RestaurantSettings.findOne() || {};
+    const locations = await TableLocation.findAll({ where: { is_active: true }, order: [['name', 'ASC']] });
     res.render('pages/public/reserve', {
       layout: 'public-layout',
       title: 'Reserve a Table',
       hours,
       settings,
+      locations,
     });
   } catch (error) {
     console.error('Reserve page error:', error);
@@ -55,11 +57,59 @@ exports.submitReservation = async (req, res) => {
       return res.redirect('/reserve');
     }
 
-    const { customer_name, customer_email, customer_phone, party_size, reservation_date, reservation_time, table_id, special_requests } = req.body;
+    const { customer_name, customer_email, customer_phone, party_size, reservation_date, reservation_time, location_id, special_requests } = req.body;
 
     if (!customer_name || !customer_phone || !party_size || !reservation_date || !reservation_time) {
       req.flash('error', 'Please fill in all required fields');
       return res.redirect('/reserve');
+    }
+
+    // Auto-assign a table based on location, party size, date, and time
+    let assignedTableId = null;
+    const size = parseInt(party_size);
+    const duration = settings.default_reservation_duration || 90;
+    const startMoment = moment(`${reservation_date} ${reservation_time}`, 'YYYY-MM-DD HH:mm');
+    const endMoment = moment(startMoment).add(duration, 'minutes');
+    const reqStart = startMoment.format('HH:mm:ss');
+    const reqEnd = endMoment.format('HH:mm:ss');
+
+    // Find busy tables for this time window
+    const conflicting = await Reservation.findAll({
+      where: {
+        reservation_date,
+        status: { [Op.in]: ['pending', 'confirmed', 'seated'] },
+      },
+      attributes: ['table_id', 'reservation_time', 'end_time'],
+      raw: true,
+    });
+
+    const busyTableIds = new Set();
+    conflicting.forEach(r => {
+      if (!r.table_id) return;
+      const rStart = r.reservation_time;
+      const rEnd = r.end_time || moment(`${reservation_date} ${r.reservation_time}`, 'YYYY-MM-DD HH:mm:ss').add(duration, 'minutes').format('HH:mm:ss');
+      if (reqStart < rEnd && reqEnd > rStart) {
+        busyTableIds.add(r.table_id);
+      }
+    });
+
+    const tableWhere = {
+      is_active: true,
+      capacity: { [Op.gte]: size },
+    };
+    if (busyTableIds.size > 0) {
+      tableWhere.id = { [Op.notIn]: Array.from(busyTableIds) };
+    }
+    if (location_id) {
+      tableWhere.location_id = parseInt(location_id);
+    }
+
+    const bestTable = await Table.findOne({
+      where: tableWhere,
+      order: [['capacity', 'ASC'], ['table_number', 'ASC']],
+    });
+    if (bestTable) {
+      assignedTableId = bestTable.id;
     }
 
     const reservation = await Reservation.create({
@@ -67,10 +117,10 @@ exports.submitReservation = async (req, res) => {
       customer_name,
       customer_email: customer_email || null,
       customer_phone,
-      party_size: parseInt(party_size),
+      party_size: size,
       reservation_date,
       reservation_time,
-      table_id: table_id || null,
+      table_id: assignedTableId,
       status: settings.auto_confirm_reservations ? 'confirmed' : 'pending',
       special_requests: special_requests || null,
       source: 'online',

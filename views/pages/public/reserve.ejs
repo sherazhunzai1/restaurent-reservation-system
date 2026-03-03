@@ -1,206 +1,156 @@
-<!-- Page Header -->
-<section class="relative min-h-[40vh] flex items-center justify-center overflow-hidden">
-  <div class="absolute inset-0 bg-gradient-to-br from-dark-200 via-dark-100 to-dark-50"></div>
-  <div class="absolute inset-0 hero-glow opacity-50"></div>
-  <div class="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-warm-50 to-transparent"></div>
-  <div class="relative z-10 text-center px-6 pt-20">
-    <span class="inline-block px-4 py-1 border border-gold-200/30 rounded-full text-gold-200 text-[10px] font-semibold tracking-[3px] uppercase mb-4">Reservations</span>
-    <h1 class="font-serif text-4xl lg:text-5xl font-bold text-white mb-2">Reserve a Table</h1>
-    <p class="text-white/40 text-base">Book your dining experience with us</p>
+<!-- Restaurant Header Bar -->
+<div class="bg-gradient-to-r from-emerald-700 to-emerald-600 pt-24 pb-8">
+  <div class="max-w-2xl mx-auto px-6 text-center">
+    <h1 class="font-serif text-3xl font-bold text-white mb-1"><%= restaurant.name %></h1>
+    <% if (restaurant.address) { %>
+      <p class="text-emerald-100/70 text-sm"><%= restaurant.address %></p>
+    <% } %>
   </div>
-</section>
+</div>
 
-<section class="py-16 lg:py-20">
-  <div class="max-w-7xl mx-auto px-6">
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
-      <!-- Main Form -->
-      <div class="lg:col-span-7">
-        <!-- Flash Messages -->
-        <% if (typeof error !== 'undefined' && error && error.length > 0) { %>
-          <% error.forEach(function(msg) { %>
-            <div class="mb-4 p-4 bg-red-50 border border-red-200 rounded-xl text-red-700 text-sm flex items-center gap-2">
-              <i class="bi bi-exclamation-circle"></i><%= msg %>
-            </div>
-          <% }); %>
-        <% } %>
+<!-- Flash Messages -->
+<% if (typeof error !== 'undefined' && error && error.length > 0) { %>
+  <div class="max-w-2xl mx-auto px-6 mt-4">
+    <% error.forEach(function(msg) { %>
+      <div class="p-4 bg-red-50 border border-red-200 rounded-xl text-red-700 text-sm flex items-center gap-2 mb-2">
+        <i class="bi bi-exclamation-circle"></i><%= msg %>
+      </div>
+    <% }); %>
+  </div>
+<% } %>
 
-        <div class="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
-          <div class="p-8 lg:p-10">
-            <h4 class="font-serif text-2xl font-bold text-gray-900 mb-1">Reservation Details</h4>
-            <p class="text-gray-400 text-sm mb-8">Fill in the form below to reserve your table.</p>
+<% if (!settings.allow_online_reservations) { %>
+  <div class="max-w-2xl mx-auto px-6 py-16">
+    <div class="p-6 bg-amber-50 border border-amber-200 rounded-xl text-amber-700 text-center">
+      <i class="bi bi-info-circle text-2xl mb-2 block"></i>
+      <p class="font-semibold mb-1">Online reservations are currently unavailable</p>
+      <p class="text-sm">Please call us at <strong><%= restaurant.phone %></strong> to make a reservation.</p>
+    </div>
+  </div>
+<% } else { %>
 
-            <% if (!settings.allow_online_reservations) { %>
-              <div class="p-5 bg-amber-50 border border-amber-200 rounded-xl text-amber-700 text-sm">
-                <i class="bi bi-info-circle mr-2"></i>Online reservations are currently unavailable. Please call us at <strong><%= restaurant.phone %></strong> to make a reservation.
-              </div>
-            <% } else { %>
-              <form action="/reserve" method="POST">
-                <!-- Personal Info -->
-                <div class="mb-8">
-                  <div class="text-[11px] font-bold text-gold-200 uppercase tracking-[2px] pb-3 mb-5 border-b border-gold-200/15">Your Information</div>
-                  <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                    <div>
-                      <label class="block text-sm font-semibold text-gray-700 mb-1.5">Full Name <span class="text-red-400">*</span></label>
-                      <input type="text" name="customer_name" placeholder="John Smith" required
-                        class="w-full px-4 py-3 border-2 border-gray-100 rounded-xl text-sm text-gray-800 bg-gray-50/50 placeholder:text-gray-300 focus:border-gold-200 focus:bg-white focus:ring-2 focus:ring-gold-200/10 transition-all outline-none">
-                    </div>
-                    <div>
-                      <label class="block text-sm font-semibold text-gray-700 mb-1.5">Phone Number <span class="text-red-400">*</span></label>
-                      <input type="tel" name="customer_phone" placeholder="+1 (555) 123-4567" required
-                        class="w-full px-4 py-3 border-2 border-gray-100 rounded-xl text-sm text-gray-800 bg-gray-50/50 placeholder:text-gray-300 focus:border-gold-200 focus:bg-white focus:ring-2 focus:ring-gold-200/10 transition-all outline-none">
-                    </div>
-                    <div class="md:col-span-2">
-                      <label class="block text-sm font-semibold text-gray-700 mb-1.5">Email</label>
-                      <input type="email" name="customer_email" placeholder="john@example.com"
-                        class="w-full px-4 py-3 border-2 border-gray-100 rounded-xl text-sm text-gray-800 bg-gray-50/50 placeholder:text-gray-300 focus:border-gold-200 focus:bg-white focus:ring-2 focus:ring-gold-200/10 transition-all outline-none">
-                    </div>
-                  </div>
-                </div>
+<form action="/reserve" method="POST" id="reserveForm">
+  <div class="max-w-2xl mx-auto px-6 py-8">
 
-                <!-- Reservation Details -->
-                <div class="mb-8">
-                  <div class="text-[11px] font-bold text-gold-200 uppercase tracking-[2px] pb-3 mb-5 border-b border-gold-200/15">Reservation Details</div>
-                  <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-                    <div>
-                      <label class="block text-sm font-semibold text-gray-700 mb-1.5">Party Size <span class="text-red-400">*</span></label>
-                      <select name="party_size" id="partySize" required
-                        class="w-full px-4 py-3 border-2 border-gray-100 rounded-xl text-sm text-gray-800 bg-gray-50/50 focus:border-gold-200 focus:bg-white focus:ring-2 focus:ring-gold-200/10 transition-all outline-none appearance-none cursor-pointer">
-                        <% for (let i = 1; i <= settings.max_party_size; i++) { %>
-                          <option value="<%= i %>" <%= i === 2 ? 'selected' : '' %>><%= i %> <%= i === 1 ? 'Guest' : 'Guests' %></option>
-                        <% } %>
-                      </select>
-                    </div>
-                    <div>
-                      <label class="block text-sm font-semibold text-gray-700 mb-1.5">Date <span class="text-red-400">*</span></label>
-                      <input type="date" name="reservation_date" id="reservationDate" required
-                        class="w-full px-4 py-3 border-2 border-gray-100 rounded-xl text-sm text-gray-800 bg-gray-50/50 focus:border-gold-200 focus:bg-white focus:ring-2 focus:ring-gold-200/10 transition-all outline-none">
-                    </div>
-                    <div>
-                      <label class="block text-sm font-semibold text-gray-700 mb-1.5">Time <span class="text-red-400">*</span></label>
-                      <input type="time" name="reservation_time" id="reservationTime" required
-                        class="w-full px-4 py-3 border-2 border-gray-100 rounded-xl text-sm text-gray-800 bg-gray-50/50 focus:border-gold-200 focus:bg-white focus:ring-2 focus:ring-gold-200/10 transition-all outline-none">
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Table Selection -->
-                <div id="tableSelectionSection" class="mb-8 hidden">
-                  <div class="text-[11px] font-bold text-gold-200 uppercase tracking-[2px] pb-3 mb-5 border-b border-gold-200/15">Select Your Table</div>
-                  <div id="tableLoadingMsg" class="hidden text-center text-gray-400 py-6">
-                    <svg class="animate-spin h-5 w-5 text-gold-200 mx-auto mb-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
-                    Finding available tables...
-                  </div>
-                  <div id="noTablesMsg" class="hidden p-4 bg-amber-50 border border-amber-200 rounded-xl text-amber-700 text-sm">
-                    <i class="bi bi-exclamation-triangle mr-2"></i>No tables available for the selected date, time, and party size. Try adjusting your selection.
-                  </div>
-                  <div id="tableCards" class="grid grid-cols-2 md:grid-cols-3 gap-3"></div>
-                  <input type="hidden" name="table_id" id="selectedTableId" value="">
-                </div>
-
-                <!-- Special Requests -->
-                <div class="mb-8">
-                  <label class="block text-sm font-semibold text-gray-700 mb-1.5">Special Requests</label>
-                  <textarea name="special_requests" rows="3" placeholder="Dietary restrictions, allergies, celebrations, seating preferences..."
-                    class="w-full px-4 py-3 border-2 border-gray-100 rounded-xl text-sm text-gray-800 bg-gray-50/50 placeholder:text-gray-300 focus:border-gold-200 focus:bg-white focus:ring-2 focus:ring-gold-200/10 transition-all outline-none resize-none"></textarea>
-                </div>
-
-                <!-- Submit -->
-                <button type="submit" class="w-full py-4 bg-gold-200 text-white text-sm font-semibold uppercase tracking-widest rounded-full hover:bg-gold-300 hover:shadow-[0_10px_30px_rgba(200,169,126,0.3)] hover:-translate-y-0.5 transition-all duration-300">
-                  <i class="bi bi-calendar-check mr-2"></i>Confirm Reservation
-                </button>
-              </form>
+    <!-- Step 1: Guests & Date -->
+    <div class="grid grid-cols-2 gap-4 mb-8">
+      <div>
+        <label class="block text-sm font-semibold text-gray-700 mb-2">Guests</label>
+        <div class="relative">
+          <select name="party_size" id="partySize"
+            class="w-full px-4 py-3.5 bg-white border-2 border-gray-200 rounded-xl text-sm font-medium text-gray-800 appearance-none cursor-pointer focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10 transition-all outline-none">
+            <% for (let i = 1; i <= settings.max_party_size; i++) { %>
+              <option value="<%= i %>" <%= i === 2 ? 'selected' : '' %>><%= i %> <%= i === 1 ? 'Guest' : 'Guests' %></option>
             <% } %>
+          </select>
+          <div class="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-gray-400">
+            <i class="bi bi-chevron-down text-sm"></i>
           </div>
         </div>
       </div>
+      <div>
+        <label class="block text-sm font-semibold text-gray-700 mb-2">Date</label>
+        <input type="date" name="reservation_date" id="reservationDate" required
+          class="w-full px-4 py-3.5 bg-white border-2 border-gray-200 rounded-xl text-sm font-medium text-gray-800 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10 transition-all outline-none">
+      </div>
+    </div>
 
-      <!-- Sidebar -->
-      <div class="lg:col-span-5 space-y-6">
-        <!-- Operating Hours -->
-        <div class="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden">
-          <div class="bg-gradient-to-br from-dark-200 via-dark-100 to-dark-50 px-6 py-4 flex items-center gap-3">
-            <i class="bi bi-clock text-gold-200 text-lg"></i>
-            <h6 class="text-white font-semibold text-sm">Operating Hours</h6>
+    <!-- Step 2: Time Slots -->
+    <div id="timeSection">
+      <h3 class="text-lg font-bold text-gray-900 mb-4">Select a time</h3>
+      <div id="timeSlotsContainer">
+        <div class="text-center py-8 text-gray-400 text-sm">
+          <i class="bi bi-clock text-2xl block mb-2 text-gray-300"></i>
+          Select a date to see available times
+        </div>
+      </div>
+      <input type="hidden" name="reservation_time" id="selectedTime" value="">
+    </div>
+
+    <!-- Step 3: Location -->
+    <div id="locationSection" class="mt-8 hidden">
+      <h3 class="text-lg font-bold text-gray-900 mb-4">Location</h3>
+      <div class="bg-white border-2 border-gray-200 rounded-xl overflow-hidden">
+        <% locations.forEach(function(loc, idx) { %>
+          <label class="flex items-center px-5 py-4 cursor-pointer hover:bg-gray-50 transition-colors <%= idx < locations.length - 1 ? 'border-b border-gray-100' : '' %>">
+            <input type="radio" name="location_id" value="<%= loc.id %>" class="location-radio w-5 h-5 text-emerald-600 border-gray-300 focus:ring-emerald-500 cursor-pointer accent-emerald-600">
+            <span class="ml-4 flex items-center gap-2">
+              <i class="bi bi-<%= loc.icon || 'geo-alt' %> text-gray-400"></i>
+              <span class="text-sm font-medium text-gray-800"><%= loc.name %></span>
+            </span>
+          </label>
+        <% }); %>
+      </div>
+    </div>
+
+    <!-- Step 4: Personal Info (shown after location) -->
+    <div id="personalInfoSection" class="mt-8 hidden">
+      <h3 class="text-lg font-bold text-gray-900 mb-4">Your details</h3>
+      <div class="space-y-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Full Name <span class="text-red-400">*</span></label>
+            <input type="text" name="customer_name" placeholder="John Smith" required
+              class="w-full px-4 py-3.5 bg-white border-2 border-gray-200 rounded-xl text-sm text-gray-800 placeholder:text-gray-300 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10 transition-all outline-none">
           </div>
-          <div class="p-5">
-            <% hours.forEach(function(h) { %>
-              <div class="flex justify-between items-center py-2.5 border-b border-gray-50 last:border-0">
-                <span class="text-gray-700 text-sm font-medium"><%= h.day_name %></span>
-                <% if (h.is_open) { %>
-                  <span class="text-emerald-600 text-sm font-medium"><%= h.opening_time %> - <%= h.closing_time %></span>
-                <% } else { %>
-                  <span class="text-red-400 text-sm font-semibold">Closed</span>
-                <% } %>
-              </div>
-            <% }); %>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Phone <span class="text-red-400">*</span></label>
+            <input type="tel" name="customer_phone" placeholder="+1 (555) 123-4567" required
+              class="w-full px-4 py-3.5 bg-white border-2 border-gray-200 rounded-xl text-sm text-gray-800 placeholder:text-gray-300 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10 transition-all outline-none">
           </div>
         </div>
-
-        <!-- Good to Know -->
-        <div class="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden">
-          <div class="bg-gradient-to-br from-dark-200 via-dark-100 to-dark-50 px-6 py-4 flex items-center gap-3">
-            <i class="bi bi-info-circle text-gold-200 text-lg"></i>
-            <h6 class="text-white font-semibold text-sm">Good to Know</h6>
-          </div>
-          <div class="p-5 space-y-3">
-            <div class="flex items-start gap-3">
-              <div class="w-5 h-5 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 text-[10px] flex-shrink-0 mt-0.5"><i class="bi bi-check2"></i></div>
-              <span class="text-gray-500 text-sm leading-relaxed">Reservations must be made at least <strong class="text-gray-700"><%= settings.min_advance_booking_hours %> hours</strong> in advance</span>
-            </div>
-            <div class="flex items-start gap-3">
-              <div class="w-5 h-5 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 text-[10px] flex-shrink-0 mt-0.5"><i class="bi bi-check2"></i></div>
-              <span class="text-gray-500 text-sm leading-relaxed">Book up to <strong class="text-gray-700"><%= settings.max_advance_booking_days %> days</strong> ahead</span>
-            </div>
-            <div class="flex items-start gap-3">
-              <div class="w-5 h-5 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 text-[10px] flex-shrink-0 mt-0.5"><i class="bi bi-check2"></i></div>
-              <span class="text-gray-500 text-sm leading-relaxed">Max party size: <strong class="text-gray-700"><%= settings.max_party_size %> guests</strong></span>
-            </div>
-            <% if (settings.cancellation_policy) { %>
-              <div class="mt-3 pt-3 border-t border-gray-50">
-                <p class="text-gray-400 text-xs"><strong class="text-gray-500">Cancellation Policy:</strong> <%= settings.cancellation_policy %></p>
-              </div>
-            <% } %>
-          </div>
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1.5">Email</label>
+          <input type="email" name="customer_email" placeholder="john@example.com"
+            class="w-full px-4 py-3.5 bg-white border-2 border-gray-200 rounded-xl text-sm text-gray-800 placeholder:text-gray-300 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10 transition-all outline-none">
         </div>
-
-        <!-- Need Help -->
-        <div class="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden">
-          <div class="bg-gradient-to-br from-dark-200 via-dark-100 to-dark-50 px-6 py-4 flex items-center gap-3">
-            <i class="bi bi-telephone text-gold-200 text-lg"></i>
-            <h6 class="text-white font-semibold text-sm">Need Help?</h6>
-          </div>
-          <div class="p-5">
-            <p class="text-gray-400 text-sm mb-4">For large parties or special events, please contact us directly.</p>
-            <% if (restaurant.phone) { %>
-              <div class="flex items-center gap-3 mb-2">
-                <i class="bi bi-telephone text-gold-200"></i>
-                <strong class="text-gray-700 text-sm"><%= restaurant.phone %></strong>
-              </div>
-            <% } %>
-            <% if (restaurant.email) { %>
-              <div class="flex items-center gap-3">
-                <i class="bi bi-envelope text-gold-200"></i>
-                <span class="text-gray-600 text-sm"><%= restaurant.email %></span>
-              </div>
-            <% } %>
-          </div>
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1.5">Special Requests</label>
+          <textarea name="special_requests" rows="3" placeholder="Dietary restrictions, allergies, celebrations..."
+            class="w-full px-4 py-3.5 bg-white border-2 border-gray-200 rounded-xl text-sm text-gray-800 placeholder:text-gray-300 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10 transition-all outline-none resize-none"></textarea>
         </div>
       </div>
     </div>
+
+    <!-- Terms -->
+    <div id="termsSection" class="mt-8 hidden">
+      <div class="bg-gray-50 rounded-xl p-5 border border-gray-100">
+        <h4 class="text-sm font-bold text-gray-700 mb-2"><%= restaurant.name %> Terms & Conditions</h4>
+        <p class="text-xs text-gray-400 leading-relaxed">
+          By clicking "Continue" you agree to our reservation terms. Please arrive within 15 minutes of your reservation time.
+          Late arrivals may result in your table being released. For cancellations, please notify us at least 2 hours in advance.
+          <% if (settings.cancellation_policy) { %> <%= settings.cancellation_policy %><% } %>
+        </p>
+      </div>
+    </div>
+
+    <!-- Continue Button -->
+    <div class="mt-8" id="submitSection" style="display:none;">
+      <button type="submit" class="w-full py-4 bg-emerald-600 text-white text-sm font-bold uppercase tracking-widest rounded-xl hover:bg-emerald-700 hover:shadow-[0_10px_30px_rgba(16,185,129,0.25)] transition-all duration-300">
+        Continue
+      </button>
+    </div>
+
   </div>
-</section>
+</form>
+
+<% } %>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   var dateInput = document.getElementById('reservationDate');
-  var timeInput = document.getElementById('reservationTime');
   var partySize = document.getElementById('partySize');
-  var tableSection = document.getElementById('tableSelectionSection');
-  var tableCards = document.getElementById('tableCards');
-  var loadingMsg = document.getElementById('tableLoadingMsg');
-  var noTablesMsg = document.getElementById('noTablesMsg');
-  var selectedTableInput = document.getElementById('selectedTableId');
+  var timeSlotsContainer = document.getElementById('timeSlotsContainer');
+  var selectedTimeInput = document.getElementById('selectedTime');
+  var locationSection = document.getElementById('locationSection');
+  var personalInfoSection = document.getElementById('personalInfoSection');
+  var termsSection = document.getElementById('termsSection');
+  var submitSection = document.getElementById('submitSection');
 
+  // Operating hours data from server
+  var hoursData = <%- JSON.stringify(hours.map(function(h) { return { day_of_week: h.day_of_week, day_name: h.day_name, is_open: h.is_open, opening_time: h.opening_time, closing_time: h.closing_time }; })) %>;
+
+  // Set date min/max
   if (dateInput) {
     var today = new Date();
     var minDate = new Date(today);
@@ -211,77 +161,121 @@ document.addEventListener('DOMContentLoaded', function() {
     dateInput.min = minDate.toISOString().split('T')[0];
     dateInput.max = maxDate.toISOString().split('T')[0];
     dateInput.value = minDate.toISOString().split('T')[0];
+
+    // Generate slots on load
+    generateTimeSlots();
   }
 
-  var fetchTimeout = null;
+  function generateTimeSlots() {
+    var dateVal = dateInput.value;
+    if (!dateVal) return;
 
-  function fetchAvailableTables() {
-    var date = dateInput ? dateInput.value : '';
-    var time = timeInput ? timeInput.value : '';
-    var size = partySize ? partySize.value : '';
+    // Reset selection
+    selectedTimeInput.value = '';
+    locationSection.classList.add('hidden');
+    personalInfoSection.classList.add('hidden');
+    termsSection.classList.add('hidden');
+    submitSection.style.display = 'none';
 
-    if (!date || !time || !size) {
-      tableSection.classList.add('hidden');
+    // Get day of week for selected date
+    var selectedDate = new Date(dateVal + 'T12:00:00');
+    var dayOfWeek = selectedDate.getDay(); // 0=Sun, 1=Mon, ...
+
+    // Find matching hours
+    var dayHours = null;
+    for (var i = 0; i < hoursData.length; i++) {
+      if (hoursData[i].day_of_week === dayOfWeek) {
+        dayHours = hoursData[i];
+        break;
+      }
+    }
+
+    if (!dayHours || !dayHours.is_open) {
+      timeSlotsContainer.innerHTML = '<div class="text-center py-8 text-gray-400 text-sm">' +
+        '<i class="bi bi-calendar-x text-2xl block mb-2 text-gray-300"></i>' +
+        'We are closed on ' + (dayHours ? dayHours.day_name : 'this day') + '</div>';
       return;
     }
 
-    selectedTableInput.value = '';
-    tableSection.classList.remove('hidden');
-    loadingMsg.classList.remove('hidden');
-    noTablesMsg.classList.add('hidden');
-    tableCards.innerHTML = '';
+    // Parse times
+    var openParts = dayHours.opening_time.split(':');
+    var closeParts = dayHours.closing_time.split(':');
+    var openMinutes = parseInt(openParts[0]) * 60 + parseInt(openParts[1]);
+    var closeMinutes = parseInt(closeParts[0]) * 60 + parseInt(closeParts[1]);
 
-    clearTimeout(fetchTimeout);
-    fetchTimeout = setTimeout(function() {
-      fetch('/api/available-tables?date=' + encodeURIComponent(date) + '&time=' + encodeURIComponent(time) + '&party_size=' + encodeURIComponent(size))
-        .then(function(r) { return r.json(); })
-        .then(function(data) {
-          loadingMsg.classList.add('hidden');
+    // Generate 15-min interval slots
+    var slots = [];
+    for (var m = openMinutes; m < closeMinutes; m += 15) {
+      var hours24 = Math.floor(m / 60);
+      var mins = m % 60;
+      var h12 = hours24 % 12 || 12;
+      var ampm = hours24 < 12 ? 'AM' : 'PM';
+      var display = h12 + ':' + (mins < 10 ? '0' : '') + mins + ' ' + ampm;
+      var value = (hours24 < 10 ? '0' : '') + hours24 + ':' + (mins < 10 ? '0' : '') + mins;
+      slots.push({ display: display, value: value });
+    }
 
-          if (!data.tables || data.tables.length === 0) {
-            noTablesMsg.classList.remove('hidden');
-            return;
-          }
+    if (slots.length === 0) {
+      timeSlotsContainer.innerHTML = '<div class="text-center py-8 text-gray-400 text-sm">No available time slots</div>';
+      return;
+    }
 
-          var html = '';
-          data.tables.forEach(function(t) {
-            var icon = t.location_icon || 'geo-alt';
-            var locName = t.location_name || '';
-            html += '<div class="table-card-wrapper">' +
-              '<div class="table-option group cursor-pointer border-2 border-gray-100 rounded-xl p-4 text-center hover:border-gold-200 hover:shadow-md transition-all duration-300" data-table-id="' + t.id + '">' +
-                '<div class="w-12 h-12 rounded-full bg-gold-200/10 flex items-center justify-center text-gold-200 mx-auto mb-2 group-hover:bg-gold-200 group-hover:text-white transition-all duration-300">' +
-                  '<i class="bi bi-' + icon + '"></i>' +
-                '</div>' +
-                '<h6 class="font-bold text-gray-800 text-sm mb-0.5">Table ' + t.table_number + '</h6>' +
-                '<p class="text-gray-400 text-xs mb-1"><i class="bi bi-people mr-1"></i>' + t.capacity + ' seats</p>' +
-                (locName ? '<span class="inline-block text-[10px] font-semibold text-gold-300 bg-gold-200/10 px-2 py-0.5 rounded-full"><i class="bi bi-' + icon + ' mr-1"></i>' + locName + '</span>' : '') +
-              '</div>' +
-            '</div>';
-          });
+    var html = '<div class="grid grid-cols-4 gap-2">';
+    slots.forEach(function(slot) {
+      html += '<button type="button" class="time-slot-btn py-3 px-2 text-sm font-medium rounded-lg border-2 border-gray-200 text-gray-700 bg-white hover:border-emerald-500 hover:text-emerald-700 transition-all" data-time="' + slot.value + '">' + slot.display + '</button>';
+    });
+    html += '</div>';
+    timeSlotsContainer.innerHTML = html;
 
-          tableCards.innerHTML = html;
-
-          document.querySelectorAll('.table-option').forEach(function(card) {
-            card.addEventListener('click', function() {
-              document.querySelectorAll('.table-option').forEach(function(c) {
-                c.classList.remove('selected', 'border-gold-200', 'shadow-md', 'ring-2', 'ring-gold-200/20');
-                c.classList.add('border-gray-100');
-              });
-              card.classList.add('selected', 'border-gold-200', 'shadow-md', 'ring-2', 'ring-gold-200/20');
-              card.classList.remove('border-gray-100');
-              selectedTableInput.value = card.getAttribute('data-table-id');
-            });
-          });
-        })
-        .catch(function() {
-          loadingMsg.classList.add('hidden');
-          noTablesMsg.classList.remove('hidden');
+    // Attach click handlers
+    document.querySelectorAll('.time-slot-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.time-slot-btn').forEach(function(b) {
+          b.classList.remove('border-emerald-500', 'bg-emerald-50', 'text-emerald-700');
+          b.classList.add('border-gray-200', 'text-gray-700', 'bg-white');
         });
-    }, 300);
+        btn.classList.remove('border-gray-200', 'text-gray-700', 'bg-white');
+        btn.classList.add('border-emerald-500', 'bg-emerald-50', 'text-emerald-700');
+        selectedTimeInput.value = btn.getAttribute('data-time');
+
+        // Show next sections
+        locationSection.classList.remove('hidden');
+        personalInfoSection.classList.remove('hidden');
+        termsSection.classList.remove('hidden');
+        submitSection.style.display = '';
+
+        // Smooth scroll to location
+        locationSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
   }
 
-  if (dateInput) dateInput.addEventListener('change', fetchAvailableTables);
-  if (timeInput) timeInput.addEventListener('change', fetchAvailableTables);
-  if (partySize) partySize.addEventListener('change', fetchAvailableTables);
+  // Regenerate slots when date changes
+  if (dateInput) dateInput.addEventListener('change', generateTimeSlots);
+  if (partySize) partySize.addEventListener('change', function() {
+    // Reset flow when party size changes
+    selectedTimeInput.value = '';
+    locationSection.classList.add('hidden');
+    personalInfoSection.classList.add('hidden');
+    termsSection.classList.add('hidden');
+    submitSection.style.display = 'none';
+    // Re-highlight nothing
+    document.querySelectorAll('.time-slot-btn').forEach(function(b) {
+      b.classList.remove('border-emerald-500', 'bg-emerald-50', 'text-emerald-700');
+      b.classList.add('border-gray-200', 'text-gray-700', 'bg-white');
+    });
+  });
+
+  // Validation before submit
+  var form = document.getElementById('reserveForm');
+  if (form) {
+    form.addEventListener('submit', function(e) {
+      if (!selectedTimeInput.value) {
+        e.preventDefault();
+        alert('Please select a time slot.');
+        return;
+      }
+    });
+  }
 });
 </script>
