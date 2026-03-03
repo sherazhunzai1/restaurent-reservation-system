@@ -50,8 +50,14 @@
       </div>
       <div>
         <label class="block text-sm font-semibold text-gray-700 mb-2">Date</label>
-        <input type="date" name="reservation_date" id="reservationDate" required
-          class="w-full px-4 py-3.5 bg-white border-2 border-gray-200 rounded-xl text-sm font-medium text-gray-800 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10 transition-all outline-none">
+        <div class="relative">
+          <select name="reservation_date" id="reservationDate" required
+            class="w-full px-4 py-3.5 bg-white border-2 border-gray-200 rounded-xl text-sm font-medium text-gray-800 appearance-none cursor-pointer focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10 transition-all outline-none">
+          </select>
+          <div class="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-gray-400">
+            <i class="bi bi-chevron-down text-sm"></i>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -150,17 +156,72 @@ document.addEventListener('DOMContentLoaded', function() {
   // Operating hours data from server
   var hoursData = <%- JSON.stringify(hours.map(function(h) { return { day_of_week: h.day_of_week, day_name: h.day_name, is_open: h.is_open, opening_time: h.opening_time, closing_time: h.closing_time }; })) %>;
 
-  // Set date min/max
+  var dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  var monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+  function isOpenDay(dayOfWeek) {
+    for (var i = 0; i < hoursData.length; i++) {
+      if (hoursData[i].day_of_week === dayOfWeek) return hoursData[i].is_open;
+    }
+    return false;
+  }
+
+  function formatDateLabel(d) {
+    var dn = dayNames[d.getDay()];
+    var dd = (d.getDate() < 10 ? '0' : '') + d.getDate();
+    var mm = monthNames[d.getMonth()];
+    return dn + ', ' + dd + ' ' + mm;
+  }
+
+  function toDateValue(d) {
+    var y = d.getFullYear();
+    var m = (d.getMonth() + 1 < 10 ? '0' : '') + (d.getMonth() + 1);
+    var dd = (d.getDate() < 10 ? '0' : '') + d.getDate();
+    return y + '-' + m + '-' + dd;
+  }
+
+  // Populate date dropdown
   if (dateInput) {
     var today = new Date();
+    today.setHours(0, 0, 0, 0);
     var minDate = new Date(today);
     minDate.setHours(minDate.getHours() + <%= settings.min_advance_booking_hours %>);
-    var maxDate = new Date(today);
-    maxDate.setDate(maxDate.getDate() + <%= settings.max_advance_booking_days %>);
+    var maxDays = <%= settings.max_advance_booking_days %>;
 
-    dateInput.min = minDate.toISOString().split('T')[0];
-    dateInput.max = maxDate.toISOString().split('T')[0];
-    dateInput.value = minDate.toISOString().split('T')[0];
+    var todayStr = toDateValue(today);
+    var todayEntry = null;
+    var futureEntries = [];
+
+    for (var d = 0; d <= maxDays; d++) {
+      var dt = new Date(today);
+      dt.setDate(dt.getDate() + d);
+      if (dt < minDate && d > 0) continue;
+      if (!isOpenDay(dt.getDay())) continue;
+
+      var val = toDateValue(dt);
+      var label = formatDateLabel(dt);
+      if (val === todayStr) {
+        todayEntry = { value: val, label: label };
+      } else {
+        futureEntries.push({ value: val, label: label });
+      }
+    }
+
+    var html = '';
+    if (todayEntry) {
+      html += '<optgroup label="Today">';
+      html += '<option value="' + todayEntry.value + '">' + todayEntry.label + '</option>';
+      html += '</optgroup>';
+    }
+    if (futureEntries.length > 0) {
+      html += '<optgroup label="Available for booking">';
+      futureEntries.forEach(function(e) {
+        html += '<option value="' + e.value + '">' + e.label + '</option>';
+      });
+      html += '</optgroup>';
+    }
+
+    dateInput.innerHTML = html;
 
     // Generate slots on load
     generateTimeSlots();
