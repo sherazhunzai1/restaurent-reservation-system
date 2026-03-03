@@ -1,12 +1,13 @@
 <!-- Reserve Header -->
 <section class="page-header d-flex align-items-center">
-  <div class="container text-center">
+  <div class="container text-center header-content">
+    <div class="header-badge">Reservations</div>
     <h1 class="font-serif fw-bold text-white mb-2">Reserve a Table</h1>
-    <p class="text-white-50">Book your dining experience with us</p>
+    <p style="color: rgba(255,255,255,0.5);">Book your dining experience with us</p>
   </div>
 </section>
 
-<section class="py-5">
+<section class="reserve-section">
   <div class="container">
     <div class="row justify-content-center">
       <div class="col-lg-7">
@@ -20,9 +21,10 @@
           <% }); %>
         <% } %>
 
-        <div class="card border-0 shadow-sm">
-          <div class="card-body p-4 p-lg-5">
-            <h4 class="font-serif fw-bold mb-4">Reservation Details</h4>
+        <div class="reserve-card">
+          <div class="card-body">
+            <h4 class="font-serif fw-bold mb-1">Reservation Details</h4>
+            <p class="text-muted mb-4" style="font-size:0.9rem;">Fill in the form below to reserve your table.</p>
 
             <% if (!settings.allow_online_reservations) { %>
               <div class="alert alert-warning">
@@ -32,7 +34,7 @@
               <form action="/reserve" method="POST">
                 <div class="row g-3">
                   <div class="col-12">
-                    <h6 class="fw-bold text-primary border-bottom pb-2 mb-3">Your Information</h6>
+                    <div class="form-section-title">Your Information</div>
                   </div>
                   <div class="col-md-6">
                     <label class="form-label">Full Name <span class="text-danger">*</span></label>
@@ -48,7 +50,7 @@
                   </div>
 
                   <div class="col-12 mt-4">
-                    <h6 class="fw-bold text-primary border-bottom pb-2 mb-3">Reservation Details</h6>
+                    <div class="form-section-title">Reservation Details</div>
                   </div>
                   <div class="col-md-4">
                     <label class="form-label">Party Size <span class="text-danger">*</span></label>
@@ -69,9 +71,9 @@
 
                   <!-- Table Selection -->
                   <div class="col-12" id="tableSelectionSection" style="display: none;">
-                    <h6 class="fw-bold text-primary border-bottom pb-2 mb-3 mt-2">Select Your Table</h6>
+                    <div class="form-section-title mt-2">Select Your Table</div>
                     <div id="tableLoadingMsg" class="text-center text-muted py-3" style="display: none;">
-                      <div class="spinner-border spinner-border-sm text-primary me-2" role="status"></div>
+                      <div class="spinner-border spinner-border-sm me-2" style="color: var(--primary);" role="status"></div>
                       Finding available tables...
                     </div>
                     <div id="noTablesMsg" class="alert alert-warning" style="display: none;">
@@ -87,7 +89,7 @@
                   </div>
 
                   <div class="col-12 mt-4">
-                    <button type="submit" class="btn btn-primary btn-lg w-100">
+                    <button type="submit" class="btn btn-submit-reservation btn-lg w-100">
                       <i class="bi bi-calendar-check me-2"></i>Confirm Reservation
                     </button>
                   </div>
@@ -99,46 +101,70 @@
       </div>
 
       <!-- Sidebar Info -->
-      <div class="col-lg-4 offset-lg-1">
-        <div class="card border-0 shadow-sm mb-4">
-          <div class="card-body p-4">
-            <h5 class="fw-bold mb-3"><i class="bi bi-clock me-2"></i>Operating Hours</h5>
+      <div class="col-lg-4 offset-lg-1 mt-4 mt-lg-0">
+        <div class="sidebar-card mb-4">
+          <div class="card-header-custom">
+            <i class="bi bi-clock"></i>
+            <h6>Operating Hours</h6>
+          </div>
+          <div class="card-body">
             <% hours.forEach(function(h) { %>
-              <div class="d-flex justify-content-between py-2 <%= h.day_of_week < 6 ? 'border-bottom' : '' %>">
-                <small class="fw-medium"><%= h.day_name %></small>
+              <div class="sidebar-hours-row">
+                <small class="fw-semibold" style="color: var(--text-dark);"><%= h.day_name %></small>
                 <% if (h.is_open) { %>
-                  <small class="text-success"><%= h.opening_time %> - <%= h.closing_time %></small>
+                  <small style="color: #2d8a56; font-weight: 500;"><%= h.opening_time %> - <%= h.closing_time %></small>
                 <% } else { %>
-                  <small class="text-danger">Closed</small>
+                  <small style="color: var(--accent); font-weight: 600;">Closed</small>
                 <% } %>
               </div>
             <% }); %>
           </div>
         </div>
 
-        <div class="card border-0 shadow-sm mb-4">
-          <div class="card-body p-4">
-            <h5 class="fw-bold mb-3"><i class="bi bi-info-circle me-2"></i>Good to Know</h5>
-            <ul class="list-unstyled text-muted mb-0">
-              <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Reservations must be made at least <strong><%= settings.min_advance_booking_hours %> hours</strong> in advance</li>
-              <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Book up to <strong><%= settings.max_advance_booking_days %> days</strong> ahead</li>
-              <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Max party size: <strong><%= settings.max_party_size %> guests</strong></li>
-              <% if (settings.cancellation_policy) { %>
-                <li class="mt-3"><small class="text-muted"><strong>Cancellation Policy:</strong> <%= settings.cancellation_policy %></small></li>
-              <% } %>
-            </ul>
+        <div class="sidebar-card mb-4">
+          <div class="card-header-custom">
+            <i class="bi bi-info-circle"></i>
+            <h6>Good to Know</h6>
+          </div>
+          <div class="card-body">
+            <div class="info-list-item">
+              <div class="icon-check"><i class="bi bi-check2"></i></div>
+              <span>Reservations must be made at least <strong><%= settings.min_advance_booking_hours %> hours</strong> in advance</span>
+            </div>
+            <div class="info-list-item">
+              <div class="icon-check"><i class="bi bi-check2"></i></div>
+              <span>Book up to <strong><%= settings.max_advance_booking_days %> days</strong> ahead</span>
+            </div>
+            <div class="info-list-item">
+              <div class="icon-check"><i class="bi bi-check2"></i></div>
+              <span>Max party size: <strong><%= settings.max_party_size %> guests</strong></span>
+            </div>
+            <% if (settings.cancellation_policy) { %>
+              <div class="mt-3 pt-3" style="border-top: 1px solid rgba(0,0,0,0.06);">
+                <small style="color: var(--text-light);"><strong>Cancellation Policy:</strong> <%= settings.cancellation_policy %></small>
+              </div>
+            <% } %>
           </div>
         </div>
 
-        <div class="card border-0 shadow-sm">
-          <div class="card-body p-4">
-            <h5 class="fw-bold mb-3"><i class="bi bi-telephone me-2"></i>Need Help?</h5>
-            <p class="text-muted mb-2">For large parties or special events, please contact us directly.</p>
+        <div class="sidebar-card">
+          <div class="card-header-custom">
+            <i class="bi bi-telephone"></i>
+            <h6>Need Help?</h6>
+          </div>
+          <div class="card-body">
+            <p style="color: var(--text-body); font-size: 0.9rem; margin-bottom: 1rem;">For large parties or special events, please contact us directly.</p>
             <% if (restaurant.phone) { %>
-              <p class="mb-1"><i class="bi bi-telephone me-2 text-primary"></i><strong><%= restaurant.phone %></strong></p>
+              <div class="footer-contact-item mb-2" style="color: var(--text-dark);">
+                <i class="bi bi-telephone" style="color: var(--primary);"></i>
+                <strong><%= restaurant.phone %></strong>
+              </div>
             <% } %>
             <% if (restaurant.email) { %>
-              <p class="mb-0"><i class="bi bi-envelope me-2 text-primary"></i><%= restaurant.email %></p>
+              <div class="footer-contact-item" style="color: var(--text-dark);">
+                <i class="bi bi-envelope" style="color: var(--primary);"></i>
+                <span><%= restaurant.email %></span>
+              </div>
             <% } %>
           </div>
         </div>
@@ -206,14 +232,14 @@ document.addEventListener('DOMContentLoaded', function() {
             var icon = t.location_icon || 'geo-alt';
             var locName = t.location_name || '';
             html += '<div class="col-md-4 col-sm-6">' +
-              '<div class="card table-option h-100 border-2" data-table-id="' + t.id + '" style="cursor:pointer; transition: all 0.2s;">' +
+              '<div class="card table-option h-100" data-table-id="' + t.id + '">' +
                 '<div class="card-body text-center py-3">' +
-                  '<div class="d-inline-flex align-items-center justify-content-center rounded-circle bg-primary-subtle text-primary mb-2" style="width:48px;height:48px;font-size:1.2rem;">' +
+                  '<div class="table-icon">' +
                     '<i class="bi bi-' + icon + '"></i>' +
                   '</div>' +
-                  '<h6 class="fw-bold mb-1">Table ' + t.table_number + '</h6>' +
+                  '<h6 class="fw-bold mb-1" style="font-size:0.95rem;">Table ' + t.table_number + '</h6>' +
                   '<p class="text-muted small mb-1"><i class="bi bi-people me-1"></i>' + t.capacity + ' seats</p>' +
-                  (locName ? '<span class="badge bg-light text-dark"><i class="bi bi-' + icon + ' me-1"></i>' + locName + '</span>' : '') +
+                  (locName ? '<span class="badge" style="background:rgba(200,169,126,0.1);color:var(--primary-dark);font-weight:600;"><i class="bi bi-' + icon + ' me-1"></i>' + locName + '</span>' : '') +
                 '</div>' +
               '</div>' +
             '</div>';
@@ -225,11 +251,10 @@ document.addEventListener('DOMContentLoaded', function() {
           document.querySelectorAll('.table-option').forEach(function(card) {
             card.addEventListener('click', function() {
               document.querySelectorAll('.table-option').forEach(function(c) {
-                c.classList.remove('border-primary', 'shadow');
+                c.classList.remove('selected');
                 c.style.borderColor = '';
               });
-              card.classList.add('border-primary', 'shadow');
-              card.style.borderColor = '#e94560';
+              card.classList.add('selected');
               selectedTableInput.value = card.getAttribute('data-table-id');
             });
           });

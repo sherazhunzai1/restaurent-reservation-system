@@ -1,69 +1,121 @@
 <!-- Hero Section -->
-<section class="hero-section d-flex align-items-center">
-  <div class="container text-center">
-    <h1 class="hero-title font-serif mb-3"><%= restaurant.name %></h1>
-    <p class="hero-subtitle mb-4"><%= restaurant.tagline || 'Experience the finest dining' %></p>
-    <a href="/reserve" class="btn btn-primary btn-lg px-5 py-3">
-      <i class="bi bi-calendar-check me-2"></i>Reserve Your Table
-    </a>
+<section class="hero-section">
+  <!-- Decorative Elements -->
+  <div class="hero-decoration hero-deco-1"></div>
+  <div class="hero-decoration hero-deco-2"></div>
+  <div class="hero-decoration hero-deco-3"></div>
+  <div class="hero-decoration hero-deco-4"></div>
+  <div class="hero-decoration hero-deco-ring"></div>
+
+  <div class="container hero-content text-center">
+    <div class="hero-badge animate-fade-up">Fine Dining</div>
+    <h1 class="hero-title font-serif animate-fade-up animate-fade-up-delay-1">
+      Welcome to<br><span class="text-gold"><%= restaurant.name %></span>
+    </h1>
+    <p class="hero-subtitle animate-fade-up animate-fade-up-delay-2">
+      <%= restaurant.tagline || 'Where every meal becomes a cherished memory. Experience the perfect blend of flavors, ambiance, and hospitality.' %>
+    </p>
+    <div class="hero-cta animate-fade-up animate-fade-up-delay-3">
+      <a href="/reserve" class="btn btn-hero-primary me-3">
+        <i class="bi bi-calendar-check me-2"></i>Reserve a Table
+      </a>
+      <a href="#about" class="btn btn-hero-outline">
+        Discover More
+      </a>
+    </div>
+  </div>
+
+  <div class="hero-scroll-indicator animate-fade-up animate-fade-up-delay-4">
+    scroll
+    <span class="line"></span>
   </div>
 </section>
 
 <!-- About Section -->
-<section id="about" class="py-5">
+<section id="about" class="about-section">
   <div class="container">
     <div class="row align-items-center g-5">
       <div class="col-lg-6">
-        <div class="about-image-wrapper">
-          <div class="about-image-placeholder">
-            <i class="bi bi-shop"></i>
+        <div class="about-image-frame">
+          <div class="about-image-main">
+            <div class="about-pattern"></div>
+            <div class="about-icon-center">
+              <i class="bi bi-shop"></i>
+            </div>
+            <div class="about-stats">
+              <div class="stat-number">100%</div>
+              <div class="stat-text">Fresh Ingredients</div>
+            </div>
           </div>
+          <div class="about-accent-box"></div>
         </div>
       </div>
       <div class="col-lg-6">
-        <h6 class="text-primary fw-bold text-uppercase ls-wide mb-2">Welcome</h6>
-        <h2 class="font-serif fw-bold mb-4">A Dining Experience<br>Like No Other</h2>
-        <p class="text-muted lead">Welcome to <strong><%= restaurant.name %></strong>. We are dedicated to providing an unforgettable dining experience with carefully crafted dishes, warm ambiance, and exceptional service.</p>
-        <p class="text-muted">Whether you're celebrating a special occasion or simply enjoying a night out, our team is here to make every moment memorable. Reserve your table today and let us take care of the rest.</p>
-        <a href="/reserve" class="btn btn-outline-primary mt-2">Book a Table <i class="bi bi-arrow-right ms-1"></i></a>
+        <span class="section-label">Our Story</span>
+        <h2 class="section-title font-serif">A Dining Experience<br>Like No Other</h2>
+        <div class="section-divider"></div>
+        <p class="about-text-lead mb-4">
+          Welcome to <strong><%= restaurant.name %></strong>. We are dedicated to providing an unforgettable dining experience with carefully crafted dishes, warm ambiance, and exceptional service.
+        </p>
+        <p class="text-muted mb-4">
+          Whether you're celebrating a special occasion or simply enjoying a night out, our team is here to make every moment memorable. Reserve your table today and let us take care of the rest.
+        </p>
+        <div class="mb-4">
+          <div class="about-feature-item">
+            <div class="icon"><i class="bi bi-check2"></i></div>
+            <span>Locally sourced, premium ingredients</span>
+          </div>
+          <div class="about-feature-item">
+            <div class="icon"><i class="bi bi-check2"></i></div>
+            <span>Award-winning culinary team</span>
+          </div>
+          <div class="about-feature-item">
+            <div class="icon"><i class="bi bi-check2"></i></div>
+            <span>Thoughtfully designed ambiance</span>
+          </div>
+        </div>
+        <a href="/reserve" class="btn btn-hero-primary">
+          Book a Table <i class="bi bi-arrow-right ms-2"></i>
+        </a>
       </div>
     </div>
   </div>
 </section>
 
 <!-- Features Section -->
-<section class="py-5 bg-light">
+<section class="features-section">
   <div class="container">
     <div class="text-center mb-5">
-      <h6 class="text-primary fw-bold text-uppercase ls-wide">Why Choose Us</h6>
-      <h2 class="font-serif fw-bold">What We Offer</h2>
+      <span class="section-label">Why Choose Us</span>
+      <h2 class="section-title font-serif">What We Offer</h2>
+      <div class="section-divider center"></div>
     </div>
     <div class="row g-4">
       <div class="col-lg-4 col-md-6">
-        <div class="feature-card text-center p-4">
-          <div class="feature-icon mx-auto mb-3">
+        <div class="feature-card">
+          <div class="feature-icon">
             <i class="bi bi-egg-fried"></i>
           </div>
           <h5 class="fw-bold">Fresh Ingredients</h5>
-          <p class="text-muted mb-0">We use only the finest, locally-sourced ingredients to craft every dish on our menu.</p>
+          <p>We use only the finest, locally-sourced ingredients to craft every dish on our menu with passion and care.</p>
         </div>
       </div>
       <div class="col-lg-4 col-md-6">
-        <div class="feature-card text-center p-4">
-          <div class="feature-icon mx-auto mb-3">
+        <div class="feature-card">
+          <div class="feature-icon">
             <i class="bi bi-people"></i>
           </div>
           <h5 class="fw-bold">Warm Atmosphere</h5>
-          <p class="text-muted mb-0">Enjoy a comfortable and inviting space designed for memorable dining moments.</p>
+          <p>Enjoy a comfortable and inviting space designed for memorable dining moments with loved ones.</p>
         </div>
       </div>
       <div class="col-lg-4 col-md-6">
-        <div class="feature-card text-center p-4">
-          <div class="feature-icon mx-auto mb-3">
+        <div class="feature-card">
+          <div class="feature-icon">
             <i class="bi bi-star"></i>
           </div>
           <h5 class="fw-bold">Exceptional Service</h5>
-          <p class="text-muted mb-0">Our professional staff ensures an impeccable dining experience from start to finish.</p>
+          <p>Our professional staff ensures an impeccable dining experience from the moment you walk through the door.</p>
         </div>
       </div>
     </div>
@@ -71,29 +123,33 @@
 </section>
 
 <!-- Operating Hours Section -->
-<section id="hours" class="py-5">
+<section id="hours" class="hours-section">
   <div class="container">
     <div class="row justify-content-center">
-      <div class="col-lg-8">
+      <div class="col-lg-7">
         <div class="text-center mb-5">
-          <h6 class="text-primary fw-bold text-uppercase ls-wide">Visit Us</h6>
-          <h2 class="font-serif fw-bold">Operating Hours</h2>
+          <span class="section-label">Visit Us</span>
+          <h2 class="section-title font-serif">Operating Hours</h2>
+          <div class="section-divider center"></div>
         </div>
-        <div class="card border-0 shadow-sm">
-          <div class="card-body p-4">
-            <% hours.forEach(function(h) { %>
-              <div class="d-flex justify-content-between align-items-center py-3 <%= h.day_of_week < 6 ? 'border-bottom' : '' %>">
-                <span class="fw-medium"><%= h.day_name %></span>
-                <% if (h.is_open) { %>
-                  <span class="text-success">
-                    <i class="bi bi-clock me-1"></i><%= h.opening_time %> - <%= h.closing_time %>
-                  </span>
-                <% } else { %>
-                  <span class="text-danger"><i class="bi bi-x-circle me-1"></i>Closed</span>
-                <% } %>
-              </div>
-            <% }); %>
+        <div class="hours-card">
+          <div class="hours-header">
+            <div class="icon"><i class="bi bi-clock"></i></div>
+            <h5 class="font-serif">Weekly Schedule</h5>
           </div>
+          <% hours.forEach(function(h) { %>
+            <div class="hours-row">
+              <span class="day-name"><%= h.day_name %></span>
+              <% if (h.is_open) { %>
+                <span class="time-range open">
+                  <i class="bi bi-circle-fill me-1" style="font-size:0.4rem;vertical-align:middle;"></i>
+                  <%= h.opening_time %> - <%= h.closing_time %>
+                </span>
+              <% } else { %>
+                <span class="time-range closed">Closed</span>
+              <% } %>
+            </div>
+          <% }); %>
         </div>
       </div>
     </div>
@@ -101,48 +157,50 @@
 </section>
 
 <!-- CTA Section -->
-<section class="cta-section py-5">
-  <div class="container text-center">
-    <h2 class="font-serif fw-bold text-white mb-3">Ready to Dine With Us?</h2>
-    <p class="text-white-50 mb-4 lead">Make a reservation in just a few clicks and secure your spot.</p>
-    <a href="/reserve" class="btn btn-light btn-lg px-5">
+<section class="cta-section">
+  <div class="container cta-content text-center">
+    <span class="section-label" style="color: rgba(200,169,126,0.8);">Reservations Open</span>
+    <h2 class="cta-title font-serif fw-bold mb-3">Ready to Dine With Us?</h2>
+    <p class="cta-subtitle mb-4">Make a reservation in just a few clicks and secure your perfect table.</p>
+    <a href="/reserve" class="btn btn-cta">
       <i class="bi bi-calendar-plus me-2"></i>Reserve Now
     </a>
   </div>
 </section>
 
 <!-- Contact Section -->
-<section id="contact" class="py-5">
+<section id="contact" class="contact-section">
   <div class="container">
     <div class="text-center mb-5">
-      <h6 class="text-primary fw-bold text-uppercase ls-wide">Get In Touch</h6>
-      <h2 class="font-serif fw-bold">Contact Us</h2>
+      <span class="section-label">Get In Touch</span>
+      <h2 class="section-title font-serif">Contact Us</h2>
+      <div class="section-divider center"></div>
     </div>
     <div class="row g-4 justify-content-center">
       <% if (restaurant.address) { %>
         <div class="col-lg-4 col-md-6">
-          <div class="text-center p-4">
-            <div class="contact-icon mx-auto mb-3"><i class="bi bi-geo-alt"></i></div>
-            <h6 class="fw-bold">Address</h6>
-            <p class="text-muted mb-0"><%= restaurant.address %></p>
+          <div class="contact-card">
+            <div class="contact-icon"><i class="bi bi-geo-alt"></i></div>
+            <h6 class="fw-bold">Our Address</h6>
+            <p><%= restaurant.address %></p>
           </div>
         </div>
       <% } %>
       <% if (restaurant.phone) { %>
         <div class="col-lg-4 col-md-6">
-          <div class="text-center p-4">
-            <div class="contact-icon mx-auto mb-3"><i class="bi bi-telephone"></i></div>
+          <div class="contact-card">
+            <div class="contact-icon"><i class="bi bi-telephone"></i></div>
             <h6 class="fw-bold">Phone</h6>
-            <p class="text-muted mb-0"><%= restaurant.phone %></p>
+            <p><%= restaurant.phone %></p>
           </div>
         </div>
       <% } %>
       <% if (restaurant.email) { %>
         <div class="col-lg-4 col-md-6">
-          <div class="text-center p-4">
-            <div class="contact-icon mx-auto mb-3"><i class="bi bi-envelope"></i></div>
+          <div class="contact-card">
+            <div class="contact-icon"><i class="bi bi-envelope"></i></div>
             <h6 class="fw-bold">Email</h6>
-            <p class="text-muted mb-0"><%= restaurant.email %></p>
+            <p><%= restaurant.email %></p>
           </div>
         </div>
       <% } %>
