@@ -26,7 +26,7 @@
 }
 
 * {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Plus Jakarta Sans', sans-serif;
 }
 
 body {
@@ -36,7 +36,7 @@ body {
 }
 
 .font-serif {
-  font-family: 'Playfair Display', serif !important;
+  font-family: 'Cormorant Garamond', serif !important;
 }
 
 .ls-wide {
@@ -101,7 +101,7 @@ body {
 }
 
 #mainNav .navbar-brand {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Cormorant Garamond', serif;
   font-size: 1.6rem;
   color: #fff !important;
   letter-spacing: 1px;
@@ -436,7 +436,7 @@ body {
 }
 
 .about-stats .stat-number {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Cormorant Garamond', serif;
   font-size: 2rem;
   font-weight: 700;
   color: var(--primary);
@@ -1054,7 +1054,7 @@ footer.modern-footer {
 }
 
 .footer-brand {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Cormorant Garamond', serif;
   font-size: 1.5rem;
   color: #fff;
   margin-bottom: 1rem;
