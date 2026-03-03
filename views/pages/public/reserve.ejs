@@ -1,169 +1,186 @@
-<!-- Reserve Header -->
-<section class="page-header d-flex align-items-center">
-  <div class="container text-center header-content">
-    <div class="header-badge">Reservations</div>
-    <h1 class="font-serif fw-bold text-white mb-2">Reserve a Table</h1>
-    <p style="color: rgba(255,255,255,0.5);">Book your dining experience with us</p>
+<!-- Page Header -->
+<section class="relative min-h-[40vh] flex items-center justify-center overflow-hidden">
+  <div class="absolute inset-0 bg-gradient-to-br from-dark-200 via-dark-100 to-dark-50"></div>
+  <div class="absolute inset-0 hero-glow opacity-50"></div>
+  <div class="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-warm-50 to-transparent"></div>
+  <div class="relative z-10 text-center px-6 pt-20">
+    <span class="inline-block px-4 py-1 border border-gold-200/30 rounded-full text-gold-200 text-[10px] font-semibold tracking-[3px] uppercase mb-4">Reservations</span>
+    <h1 class="font-serif text-4xl lg:text-5xl font-bold text-white mb-2">Reserve a Table</h1>
+    <p class="text-white/40 text-base">Book your dining experience with us</p>
   </div>
 </section>
 
-<section class="reserve-section">
-  <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-lg-7">
+<section class="py-16 lg:py-20">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+      <!-- Main Form -->
+      <div class="lg:col-span-7">
         <!-- Flash Messages -->
         <% if (typeof error !== 'undefined' && error && error.length > 0) { %>
           <% error.forEach(function(msg) { %>
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-              <i class="bi bi-exclamation-circle me-2"></i><%= msg %>
-              <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            <div class="mb-4 p-4 bg-red-50 border border-red-200 rounded-xl text-red-700 text-sm flex items-center gap-2">
+              <i class="bi bi-exclamation-circle"></i><%= msg %>
             </div>
           <% }); %>
         <% } %>
 
-        <div class="reserve-card">
-          <div class="card-body">
-            <h4 class="font-serif fw-bold mb-1">Reservation Details</h4>
-            <p class="text-muted mb-4" style="font-size:0.9rem;">Fill in the form below to reserve your table.</p>
+        <div class="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
+          <div class="p-8 lg:p-10">
+            <h4 class="font-serif text-2xl font-bold text-gray-900 mb-1">Reservation Details</h4>
+            <p class="text-gray-400 text-sm mb-8">Fill in the form below to reserve your table.</p>
 
             <% if (!settings.allow_online_reservations) { %>
-              <div class="alert alert-warning">
-                <i class="bi bi-info-circle me-2"></i>Online reservations are currently unavailable. Please call us at <strong><%= restaurant.phone %></strong> to make a reservation.
+              <div class="p-5 bg-amber-50 border border-amber-200 rounded-xl text-amber-700 text-sm">
+                <i class="bi bi-info-circle mr-2"></i>Online reservations are currently unavailable. Please call us at <strong><%= restaurant.phone %></strong> to make a reservation.
               </div>
             <% } else { %>
               <form action="/reserve" method="POST">
-                <div class="row g-3">
-                  <div class="col-12">
-                    <div class="form-section-title">Your Information</div>
-                  </div>
-                  <div class="col-md-6">
-                    <label class="form-label">Full Name <span class="text-danger">*</span></label>
-                    <input type="text" name="customer_name" class="form-control" placeholder="John Smith" required>
-                  </div>
-                  <div class="col-md-6">
-                    <label class="form-label">Phone Number <span class="text-danger">*</span></label>
-                    <input type="tel" name="customer_phone" class="form-control" placeholder="+1 (555) 123-4567" required>
-                  </div>
-                  <div class="col-12">
-                    <label class="form-label">Email</label>
-                    <input type="email" name="customer_email" class="form-control" placeholder="john@example.com">
-                  </div>
-
-                  <div class="col-12 mt-4">
-                    <div class="form-section-title">Reservation Details</div>
-                  </div>
-                  <div class="col-md-4">
-                    <label class="form-label">Party Size <span class="text-danger">*</span></label>
-                    <select name="party_size" id="partySize" class="form-select" required>
-                      <% for (let i = 1; i <= settings.max_party_size; i++) { %>
-                        <option value="<%= i %>" <%= i === 2 ? 'selected' : '' %>><%= i %> <%= i === 1 ? 'Guest' : 'Guests' %></option>
-                      <% } %>
-                    </select>
-                  </div>
-                  <div class="col-md-4">
-                    <label class="form-label">Date <span class="text-danger">*</span></label>
-                    <input type="date" name="reservation_date" class="form-control" id="reservationDate" required>
-                  </div>
-                  <div class="col-md-4">
-                    <label class="form-label">Time <span class="text-danger">*</span></label>
-                    <input type="time" name="reservation_time" class="form-control" id="reservationTime" required>
-                  </div>
-
-                  <!-- Table Selection -->
-                  <div class="col-12" id="tableSelectionSection" style="display: none;">
-                    <div class="form-section-title mt-2">Select Your Table</div>
-                    <div id="tableLoadingMsg" class="text-center text-muted py-3" style="display: none;">
-                      <div class="spinner-border spinner-border-sm me-2" style="color: var(--primary);" role="status"></div>
-                      Finding available tables...
+                <!-- Personal Info -->
+                <div class="mb-8">
+                  <div class="text-[11px] font-bold text-gold-200 uppercase tracking-[2px] pb-3 mb-5 border-b border-gold-200/15">Your Information</div>
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <div>
+                      <label class="block text-sm font-semibold text-gray-700 mb-1.5">Full Name <span class="text-red-400">*</span></label>
+                      <input type="text" name="customer_name" placeholder="John Smith" required
+                        class="w-full px-4 py-3 border-2 border-gray-100 rounded-xl text-sm text-gray-800 bg-gray-50/50 placeholder:text-gray-300 focus:border-gold-200 focus:bg-white focus:ring-2 focus:ring-gold-200/10 transition-all outline-none">
                     </div>
-                    <div id="noTablesMsg" class="alert alert-warning" style="display: none;">
-                      <i class="bi bi-exclamation-triangle me-2"></i>No tables available for the selected date, time, and party size. Try adjusting your selection.
+                    <div>
+                      <label class="block text-sm font-semibold text-gray-700 mb-1.5">Phone Number <span class="text-red-400">*</span></label>
+                      <input type="tel" name="customer_phone" placeholder="+1 (555) 123-4567" required
+                        class="w-full px-4 py-3 border-2 border-gray-100 rounded-xl text-sm text-gray-800 bg-gray-50/50 placeholder:text-gray-300 focus:border-gold-200 focus:bg-white focus:ring-2 focus:ring-gold-200/10 transition-all outline-none">
                     </div>
-                    <div id="tableCards" class="row g-3"></div>
-                    <input type="hidden" name="table_id" id="selectedTableId" value="">
-                  </div>
-
-                  <div class="col-12">
-                    <label class="form-label">Special Requests</label>
-                    <textarea name="special_requests" class="form-control" rows="3" placeholder="Dietary restrictions, allergies, celebrations, seating preferences..."></textarea>
-                  </div>
-
-                  <div class="col-12 mt-4">
-                    <button type="submit" class="btn btn-submit-reservation btn-lg w-100">
-                      <i class="bi bi-calendar-check me-2"></i>Confirm Reservation
-                    </button>
+                    <div class="md:col-span-2">
+                      <label class="block text-sm font-semibold text-gray-700 mb-1.5">Email</label>
+                      <input type="email" name="customer_email" placeholder="john@example.com"
+                        class="w-full px-4 py-3 border-2 border-gray-100 rounded-xl text-sm text-gray-800 bg-gray-50/50 placeholder:text-gray-300 focus:border-gold-200 focus:bg-white focus:ring-2 focus:ring-gold-200/10 transition-all outline-none">
+                    </div>
                   </div>
                 </div>
+
+                <!-- Reservation Details -->
+                <div class="mb-8">
+                  <div class="text-[11px] font-bold text-gold-200 uppercase tracking-[2px] pb-3 mb-5 border-b border-gold-200/15">Reservation Details</div>
+                  <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                    <div>
+                      <label class="block text-sm font-semibold text-gray-700 mb-1.5">Party Size <span class="text-red-400">*</span></label>
+                      <select name="party_size" id="partySize" required
+                        class="w-full px-4 py-3 border-2 border-gray-100 rounded-xl text-sm text-gray-800 bg-gray-50/50 focus:border-gold-200 focus:bg-white focus:ring-2 focus:ring-gold-200/10 transition-all outline-none appearance-none cursor-pointer">
+                        <% for (let i = 1; i <= settings.max_party_size; i++) { %>
+                          <option value="<%= i %>" <%= i === 2 ? 'selected' : '' %>><%= i %> <%= i === 1 ? 'Guest' : 'Guests' %></option>
+                        <% } %>
+                      </select>
+                    </div>
+                    <div>
+                      <label class="block text-sm font-semibold text-gray-700 mb-1.5">Date <span class="text-red-400">*</span></label>
+                      <input type="date" name="reservation_date" id="reservationDate" required
+                        class="w-full px-4 py-3 border-2 border-gray-100 rounded-xl text-sm text-gray-800 bg-gray-50/50 focus:border-gold-200 focus:bg-white focus:ring-2 focus:ring-gold-200/10 transition-all outline-none">
+                    </div>
+                    <div>
+                      <label class="block text-sm font-semibold text-gray-700 mb-1.5">Time <span class="text-red-400">*</span></label>
+                      <input type="time" name="reservation_time" id="reservationTime" required
+                        class="w-full px-4 py-3 border-2 border-gray-100 rounded-xl text-sm text-gray-800 bg-gray-50/50 focus:border-gold-200 focus:bg-white focus:ring-2 focus:ring-gold-200/10 transition-all outline-none">
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Table Selection -->
+                <div id="tableSelectionSection" class="mb-8 hidden">
+                  <div class="text-[11px] font-bold text-gold-200 uppercase tracking-[2px] pb-3 mb-5 border-b border-gold-200/15">Select Your Table</div>
+                  <div id="tableLoadingMsg" class="hidden text-center text-gray-400 py-6">
+                    <svg class="animate-spin h-5 w-5 text-gold-200 mx-auto mb-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
+                    Finding available tables...
+                  </div>
+                  <div id="noTablesMsg" class="hidden p-4 bg-amber-50 border border-amber-200 rounded-xl text-amber-700 text-sm">
+                    <i class="bi bi-exclamation-triangle mr-2"></i>No tables available for the selected date, time, and party size. Try adjusting your selection.
+                  </div>
+                  <div id="tableCards" class="grid grid-cols-2 md:grid-cols-3 gap-3"></div>
+                  <input type="hidden" name="table_id" id="selectedTableId" value="">
+                </div>
+
+                <!-- Special Requests -->
+                <div class="mb-8">
+                  <label class="block text-sm font-semibold text-gray-700 mb-1.5">Special Requests</label>
+                  <textarea name="special_requests" rows="3" placeholder="Dietary restrictions, allergies, celebrations, seating preferences..."
+                    class="w-full px-4 py-3 border-2 border-gray-100 rounded-xl text-sm text-gray-800 bg-gray-50/50 placeholder:text-gray-300 focus:border-gold-200 focus:bg-white focus:ring-2 focus:ring-gold-200/10 transition-all outline-none resize-none"></textarea>
+                </div>
+
+                <!-- Submit -->
+                <button type="submit" class="w-full py-4 bg-gold-200 text-white text-sm font-semibold uppercase tracking-widest rounded-full hover:bg-gold-300 hover:shadow-[0_10px_30px_rgba(200,169,126,0.3)] hover:-translate-y-0.5 transition-all duration-300">
+                  <i class="bi bi-calendar-check mr-2"></i>Confirm Reservation
+                </button>
               </form>
             <% } %>
           </div>
         </div>
       </div>
 
-      <!-- Sidebar Info -->
-      <div class="col-lg-4 offset-lg-1 mt-4 mt-lg-0">
-        <div class="sidebar-card mb-4">
-          <div class="card-header-custom">
-            <i class="bi bi-clock"></i>
-            <h6>Operating Hours</h6>
+      <!-- Sidebar -->
+      <div class="lg:col-span-5 space-y-6">
+        <!-- Operating Hours -->
+        <div class="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden">
+          <div class="bg-gradient-to-br from-dark-200 via-dark-100 to-dark-50 px-6 py-4 flex items-center gap-3">
+            <i class="bi bi-clock text-gold-200 text-lg"></i>
+            <h6 class="text-white font-semibold text-sm">Operating Hours</h6>
           </div>
-          <div class="card-body">
+          <div class="p-5">
             <% hours.forEach(function(h) { %>
-              <div class="sidebar-hours-row">
-                <small class="fw-semibold" style="color: var(--text-dark);"><%= h.day_name %></small>
+              <div class="flex justify-between items-center py-2.5 border-b border-gray-50 last:border-0">
+                <span class="text-gray-700 text-sm font-medium"><%= h.day_name %></span>
                 <% if (h.is_open) { %>
-                  <small style="color: #2d8a56; font-weight: 500;"><%= h.opening_time %> - <%= h.closing_time %></small>
+                  <span class="text-emerald-600 text-sm font-medium"><%= h.opening_time %> - <%= h.closing_time %></span>
                 <% } else { %>
-                  <small style="color: var(--accent); font-weight: 600;">Closed</small>
+                  <span class="text-red-400 text-sm font-semibold">Closed</span>
                 <% } %>
               </div>
             <% }); %>
           </div>
         </div>
 
-        <div class="sidebar-card mb-4">
-          <div class="card-header-custom">
-            <i class="bi bi-info-circle"></i>
-            <h6>Good to Know</h6>
+        <!-- Good to Know -->
+        <div class="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden">
+          <div class="bg-gradient-to-br from-dark-200 via-dark-100 to-dark-50 px-6 py-4 flex items-center gap-3">
+            <i class="bi bi-info-circle text-gold-200 text-lg"></i>
+            <h6 class="text-white font-semibold text-sm">Good to Know</h6>
           </div>
-          <div class="card-body">
-            <div class="info-list-item">
-              <div class="icon-check"><i class="bi bi-check2"></i></div>
-              <span>Reservations must be made at least <strong><%= settings.min_advance_booking_hours %> hours</strong> in advance</span>
+          <div class="p-5 space-y-3">
+            <div class="flex items-start gap-3">
+              <div class="w-5 h-5 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 text-[10px] flex-shrink-0 mt-0.5"><i class="bi bi-check2"></i></div>
+              <span class="text-gray-500 text-sm leading-relaxed">Reservations must be made at least <strong class="text-gray-700"><%= settings.min_advance_booking_hours %> hours</strong> in advance</span>
             </div>
-            <div class="info-list-item">
-              <div class="icon-check"><i class="bi bi-check2"></i></div>
-              <span>Book up to <strong><%= settings.max_advance_booking_days %> days</strong> ahead</span>
+            <div class="flex items-start gap-3">
+              <div class="w-5 h-5 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 text-[10px] flex-shrink-0 mt-0.5"><i class="bi bi-check2"></i></div>
+              <span class="text-gray-500 text-sm leading-relaxed">Book up to <strong class="text-gray-700"><%= settings.max_advance_booking_days %> days</strong> ahead</span>
             </div>
-            <div class="info-list-item">
-              <div class="icon-check"><i class="bi bi-check2"></i></div>
-              <span>Max party size: <strong><%= settings.max_party_size %> guests</strong></span>
+            <div class="flex items-start gap-3">
+              <div class="w-5 h-5 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 text-[10px] flex-shrink-0 mt-0.5"><i class="bi bi-check2"></i></div>
+              <span class="text-gray-500 text-sm leading-relaxed">Max party size: <strong class="text-gray-700"><%= settings.max_party_size %> guests</strong></span>
             </div>
             <% if (settings.cancellation_policy) { %>
-              <div class="mt-3 pt-3" style="border-top: 1px solid rgba(0,0,0,0.06);">
-                <small style="color: var(--text-light);"><strong>Cancellation Policy:</strong> <%= settings.cancellation_policy %></small>
+              <div class="mt-3 pt-3 border-t border-gray-50">
+                <p class="text-gray-400 text-xs"><strong class="text-gray-500">Cancellation Policy:</strong> <%= settings.cancellation_policy %></p>
               </div>
             <% } %>
           </div>
         </div>
 
-        <div class="sidebar-card">
-          <div class="card-header-custom">
-            <i class="bi bi-telephone"></i>
-            <h6>Need Help?</h6>
+        <!-- Need Help -->
+        <div class="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden">
+          <div class="bg-gradient-to-br from-dark-200 via-dark-100 to-dark-50 px-6 py-4 flex items-center gap-3">
+            <i class="bi bi-telephone text-gold-200 text-lg"></i>
+            <h6 class="text-white font-semibold text-sm">Need Help?</h6>
           </div>
-          <div class="card-body">
-            <p style="color: var(--text-body); font-size: 0.9rem; margin-bottom: 1rem;">For large parties or special events, please contact us directly.</p>
+          <div class="p-5">
+            <p class="text-gray-400 text-sm mb-4">For large parties or special events, please contact us directly.</p>
             <% if (restaurant.phone) { %>
-              <div class="footer-contact-item mb-2" style="color: var(--text-dark);">
-                <i class="bi bi-telephone" style="color: var(--primary);"></i>
-                <strong><%= restaurant.phone %></strong>
+              <div class="flex items-center gap-3 mb-2">
+                <i class="bi bi-telephone text-gold-200"></i>
+                <strong class="text-gray-700 text-sm"><%= restaurant.phone %></strong>
               </div>
             <% } %>
             <% if (restaurant.email) { %>
-              <div class="footer-contact-item" style="color: var(--text-dark);">
-                <i class="bi bi-envelope" style="color: var(--primary);"></i>
-                <span><%= restaurant.email %></span>
+              <div class="flex items-center gap-3">
+                <i class="bi bi-envelope text-gold-200"></i>
+                <span class="text-gray-600 text-sm"><%= restaurant.email %></span>
               </div>
             <% } %>
           </div>
@@ -175,20 +192,20 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  const dateInput = document.getElementById('reservationDate');
-  const timeInput = document.getElementById('reservationTime');
-  const partySize = document.getElementById('partySize');
-  const tableSection = document.getElementById('tableSelectionSection');
-  const tableCards = document.getElementById('tableCards');
-  const loadingMsg = document.getElementById('tableLoadingMsg');
-  const noTablesMsg = document.getElementById('noTablesMsg');
-  const selectedTableInput = document.getElementById('selectedTableId');
+  var dateInput = document.getElementById('reservationDate');
+  var timeInput = document.getElementById('reservationTime');
+  var partySize = document.getElementById('partySize');
+  var tableSection = document.getElementById('tableSelectionSection');
+  var tableCards = document.getElementById('tableCards');
+  var loadingMsg = document.getElementById('tableLoadingMsg');
+  var noTablesMsg = document.getElementById('noTablesMsg');
+  var selectedTableInput = document.getElementById('selectedTableId');
 
   if (dateInput) {
-    const today = new Date();
-    const minDate = new Date(today);
+    var today = new Date();
+    var minDate = new Date(today);
     minDate.setHours(minDate.getHours() + <%= settings.min_advance_booking_hours %>);
-    const maxDate = new Date(today);
+    var maxDate = new Date(today);
     maxDate.setDate(maxDate.getDate() + <%= settings.max_advance_booking_days %>);
 
     dateInput.min = minDate.toISOString().split('T')[0];
@@ -196,23 +213,22 @@ document.addEventListener('DOMContentLoaded', function() {
     dateInput.value = minDate.toISOString().split('T')[0];
   }
 
-  let fetchTimeout = null;
+  var fetchTimeout = null;
 
   function fetchAvailableTables() {
-    const date = dateInput ? dateInput.value : '';
-    const time = timeInput ? timeInput.value : '';
-    const size = partySize ? partySize.value : '';
+    var date = dateInput ? dateInput.value : '';
+    var time = timeInput ? timeInput.value : '';
+    var size = partySize ? partySize.value : '';
 
     if (!date || !time || !size) {
-      tableSection.style.display = 'none';
+      tableSection.classList.add('hidden');
       return;
     }
 
-    // Clear previous selection
     selectedTableInput.value = '';
-    tableSection.style.display = '';
-    loadingMsg.style.display = '';
-    noTablesMsg.style.display = 'none';
+    tableSection.classList.remove('hidden');
+    loadingMsg.classList.remove('hidden');
+    noTablesMsg.classList.add('hidden');
     tableCards.innerHTML = '';
 
     clearTimeout(fetchTimeout);
@@ -220,10 +236,10 @@ document.addEventListener('DOMContentLoaded', function() {
       fetch('/api/available-tables?date=' + encodeURIComponent(date) + '&time=' + encodeURIComponent(time) + '&party_size=' + encodeURIComponent(size))
         .then(function(r) { return r.json(); })
         .then(function(data) {
-          loadingMsg.style.display = 'none';
+          loadingMsg.classList.add('hidden');
 
           if (!data.tables || data.tables.length === 0) {
-            noTablesMsg.style.display = '';
+            noTablesMsg.classList.remove('hidden');
             return;
           }
 
@@ -231,37 +247,35 @@ document.addEventListener('DOMContentLoaded', function() {
           data.tables.forEach(function(t) {
             var icon = t.location_icon || 'geo-alt';
             var locName = t.location_name || '';
-            html += '<div class="col-md-4 col-sm-6">' +
-              '<div class="card table-option h-100" data-table-id="' + t.id + '">' +
-                '<div class="card-body text-center py-3">' +
-                  '<div class="table-icon">' +
-                    '<i class="bi bi-' + icon + '"></i>' +
-                  '</div>' +
-                  '<h6 class="fw-bold mb-1" style="font-size:0.95rem;">Table ' + t.table_number + '</h6>' +
-                  '<p class="text-muted small mb-1"><i class="bi bi-people me-1"></i>' + t.capacity + ' seats</p>' +
-                  (locName ? '<span class="badge" style="background:rgba(200,169,126,0.1);color:var(--primary-dark);font-weight:600;"><i class="bi bi-' + icon + ' me-1"></i>' + locName + '</span>' : '') +
+            html += '<div class="table-card-wrapper">' +
+              '<div class="table-option group cursor-pointer border-2 border-gray-100 rounded-xl p-4 text-center hover:border-gold-200 hover:shadow-md transition-all duration-300" data-table-id="' + t.id + '">' +
+                '<div class="w-12 h-12 rounded-full bg-gold-200/10 flex items-center justify-center text-gold-200 mx-auto mb-2 group-hover:bg-gold-200 group-hover:text-white transition-all duration-300">' +
+                  '<i class="bi bi-' + icon + '"></i>' +
                 '</div>' +
+                '<h6 class="font-bold text-gray-800 text-sm mb-0.5">Table ' + t.table_number + '</h6>' +
+                '<p class="text-gray-400 text-xs mb-1"><i class="bi bi-people mr-1"></i>' + t.capacity + ' seats</p>' +
+                (locName ? '<span class="inline-block text-[10px] font-semibold text-gold-300 bg-gold-200/10 px-2 py-0.5 rounded-full"><i class="bi bi-' + icon + ' mr-1"></i>' + locName + '</span>' : '') +
               '</div>' +
             '</div>';
           });
 
           tableCards.innerHTML = html;
 
-          // Add click handlers
           document.querySelectorAll('.table-option').forEach(function(card) {
             card.addEventListener('click', function() {
               document.querySelectorAll('.table-option').forEach(function(c) {
-                c.classList.remove('selected');
-                c.style.borderColor = '';
+                c.classList.remove('selected', 'border-gold-200', 'shadow-md', 'ring-2', 'ring-gold-200/20');
+                c.classList.add('border-gray-100');
               });
-              card.classList.add('selected');
+              card.classList.add('selected', 'border-gold-200', 'shadow-md', 'ring-2', 'ring-gold-200/20');
+              card.classList.remove('border-gray-100');
               selectedTableInput.value = card.getAttribute('data-table-id');
             });
           });
         })
         .catch(function() {
-          loadingMsg.style.display = 'none';
-          noTablesMsg.style.display = '';
+          loadingMsg.classList.add('hidden');
+          noTablesMsg.classList.remove('hidden');
         });
     }, 300);
   }

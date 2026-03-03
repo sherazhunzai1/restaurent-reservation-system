@@ -1,81 +1,92 @@
 <!-- Hero Section -->
-<section class="hero-section">
-  <!-- Decorative Elements -->
-  <div class="hero-decoration hero-deco-1"></div>
-  <div class="hero-decoration hero-deco-2"></div>
-  <div class="hero-decoration hero-deco-3"></div>
-  <div class="hero-decoration hero-deco-4"></div>
-  <div class="hero-decoration hero-deco-ring"></div>
+<section class="hero-section relative min-h-screen flex items-center justify-center overflow-hidden">
+  <!-- Background layers -->
+  <div class="absolute inset-0 bg-gradient-to-br from-dark-200 via-dark-100 to-dark-50"></div>
+  <div class="absolute inset-0 hero-glow"></div>
 
-  <div class="container hero-content text-center">
-    <div class="hero-badge animate-fade-up">Fine Dining</div>
-    <h1 class="hero-title font-serif animate-fade-up animate-fade-up-delay-1">
-      Welcome to<br><span class="text-gold"><%= restaurant.name %></span>
+  <!-- Decorative elements -->
+  <div class="absolute top-[15%] left-[8%] w-32 h-32 border border-gold-200/10 rounded-full animate-float hidden md:block"></div>
+  <div class="absolute bottom-[25%] right-[10%] w-20 h-20 border border-gold-200/10 rotate-45 animate-float-delayed hidden md:block"></div>
+  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] border border-gold-200/[0.03] rounded-full animate-spin-slow hidden md:block"></div>
+  <div class="absolute top-[30%] right-[18%] w-1.5 h-1.5 bg-gold-200 rounded-full animate-pulse-soft"></div>
+  <div class="absolute bottom-[38%] left-[14%] w-1 h-1 bg-gold-200 rounded-full animate-pulse-soft-delayed"></div>
+
+  <!-- Bottom fade -->
+  <div class="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-warm-50 to-transparent z-10"></div>
+
+  <!-- Content -->
+  <div class="relative z-20 text-center px-6 max-w-4xl mx-auto">
+    <div class="animate-fade-up">
+      <span class="inline-block px-5 py-1.5 border border-gold-200/30 rounded-full text-gold-200 text-[11px] font-semibold tracking-[4px] uppercase mb-8">Fine Dining Experience</span>
+    </div>
+    <h1 class="font-serif text-5xl sm:text-6xl lg:text-7xl font-bold text-white leading-[1.1] mb-6 animate-fade-up animate-delay-1">
+      Welcome to<br><span class="hero-text-gold"><%= restaurant.name %></span>
     </h1>
-    <p class="hero-subtitle animate-fade-up animate-fade-up-delay-2">
+    <p class="text-white/50 text-lg sm:text-xl font-light leading-relaxed max-w-xl mx-auto mb-10 animate-fade-up animate-delay-2">
       <%= restaurant.tagline || 'Where every meal becomes a cherished memory. Experience the perfect blend of flavors, ambiance, and hospitality.' %>
     </p>
-    <div class="hero-cta animate-fade-up animate-fade-up-delay-3">
-      <a href="/reserve" class="btn btn-hero-primary me-3">
-        <i class="bi bi-calendar-check me-2"></i>Reserve a Table
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-up animate-delay-3">
+      <a href="/reserve" class="w-full sm:w-auto px-10 py-4 bg-gold-200 text-white text-sm font-semibold uppercase tracking-widest rounded-full hover:bg-gold-300 hover:shadow-[0_15px_40px_rgba(200,169,126,0.3)] hover:-translate-y-0.5 transition-all duration-300">
+        <i class="bi bi-calendar-check mr-2"></i>Reserve a Table
       </a>
-      <a href="#about" class="btn btn-hero-outline">
+      <a href="#about" class="w-full sm:w-auto px-10 py-4 border border-white/20 text-white text-sm font-medium uppercase tracking-widest rounded-full hover:border-white/40 hover:bg-white/5 transition-all duration-300">
         Discover More
       </a>
     </div>
   </div>
 
-  <div class="hero-scroll-indicator animate-fade-up animate-fade-up-delay-4">
+  <!-- Scroll indicator -->
+  <div class="absolute bottom-12 left-1/2 -translate-x-1/2 z-20 text-white/25 text-[10px] tracking-[3px] uppercase text-center animate-fade-up animate-delay-4">
     scroll
-    <span class="line"></span>
+    <span class="block w-px h-10 bg-gradient-to-b from-gold-200/40 to-transparent mx-auto mt-2"></span>
   </div>
 </section>
 
 <!-- About Section -->
-<section id="about" class="about-section">
-  <div class="container">
-    <div class="row align-items-center g-5">
-      <div class="col-lg-6">
-        <div class="about-image-frame">
-          <div class="about-image-main">
-            <div class="about-pattern"></div>
-            <div class="about-icon-center">
-              <i class="bi bi-shop"></i>
-            </div>
-            <div class="about-stats">
-              <div class="stat-number">100%</div>
-              <div class="stat-text">Fresh Ingredients</div>
-            </div>
+<section id="about" class="py-24 lg:py-32">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+      <!-- Image -->
+      <div class="relative">
+        <div class="relative w-full h-[420px] lg:h-[500px] rounded-2xl overflow-hidden bg-gradient-to-br from-dark-200 via-dark-100 to-dark-50">
+          <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(circle at 25% 25%, #c8a97e 1px, transparent 1px), radial-gradient(circle at 75% 75%, #c8a97e 1px, transparent 1px); background-size: 30px 30px;"></div>
+          <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-gold-200/20 text-7xl"><i class="bi bi-shop"></i></div>
+          <!-- Stats badge -->
+          <div class="absolute bottom-6 left-6 bg-dark-200/90 backdrop-blur-md rounded-xl px-5 py-4 border border-gold-200/15">
+            <div class="font-serif text-3xl font-bold text-gold-200 leading-none">100%</div>
+            <div class="text-white/50 text-[11px] uppercase tracking-wider mt-1">Fresh Ingredients</div>
           </div>
-          <div class="about-accent-box"></div>
         </div>
+        <div class="absolute -bottom-5 -right-5 w-48 h-48 border-2 border-gold-200/10 rounded-2xl -z-10 hidden lg:block"></div>
       </div>
-      <div class="col-lg-6">
-        <span class="section-label">Our Story</span>
-        <h2 class="section-title font-serif">A Dining Experience<br>Like No Other</h2>
-        <div class="section-divider"></div>
-        <p class="about-text-lead mb-4">
-          Welcome to <strong><%= restaurant.name %></strong>. We are dedicated to providing an unforgettable dining experience with carefully crafted dishes, warm ambiance, and exceptional service.
+
+      <!-- Text -->
+      <div>
+        <span class="text-gold-200 text-xs font-bold uppercase tracking-[4px]">Our Story</span>
+        <h2 class="font-serif text-4xl lg:text-5xl font-bold text-gray-900 mt-3 mb-4 leading-tight">A Dining Experience<br>Like No Other</h2>
+        <div class="w-12 h-0.5 bg-gold-200 mb-6"></div>
+        <p class="text-gray-500 text-lg leading-relaxed mb-4">
+          Welcome to <strong class="text-gray-700"><%= restaurant.name %></strong>. We are dedicated to providing an unforgettable dining experience with carefully crafted dishes, warm ambiance, and exceptional service.
         </p>
-        <p class="text-muted mb-4">
-          Whether you're celebrating a special occasion or simply enjoying a night out, our team is here to make every moment memorable. Reserve your table today and let us take care of the rest.
+        <p class="text-gray-400 leading-relaxed mb-8">
+          Whether you're celebrating a special occasion or simply enjoying a night out, our team is here to make every moment memorable.
         </p>
-        <div class="mb-4">
-          <div class="about-feature-item">
-            <div class="icon"><i class="bi bi-check2"></i></div>
-            <span>Locally sourced, premium ingredients</span>
+        <div class="space-y-3 mb-8">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-gold-200/10 flex items-center justify-center text-gold-200 text-sm flex-shrink-0"><i class="bi bi-check2"></i></div>
+            <span class="text-gray-600 text-[15px]">Locally sourced, premium ingredients</span>
           </div>
-          <div class="about-feature-item">
-            <div class="icon"><i class="bi bi-check2"></i></div>
-            <span>Award-winning culinary team</span>
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-gold-200/10 flex items-center justify-center text-gold-200 text-sm flex-shrink-0"><i class="bi bi-check2"></i></div>
+            <span class="text-gray-600 text-[15px]">Award-winning culinary team</span>
           </div>
-          <div class="about-feature-item">
-            <div class="icon"><i class="bi bi-check2"></i></div>
-            <span>Thoughtfully designed ambiance</span>
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-gold-200/10 flex items-center justify-center text-gold-200 text-sm flex-shrink-0"><i class="bi bi-check2"></i></div>
+            <span class="text-gray-600 text-[15px]">Thoughtfully designed ambiance</span>
           </div>
         </div>
-        <a href="/reserve" class="btn btn-hero-primary">
-          Book a Table <i class="bi bi-arrow-right ms-2"></i>
+        <a href="/reserve" class="inline-flex items-center px-8 py-3.5 bg-gold-200 text-white text-sm font-semibold uppercase tracking-wider rounded-full hover:bg-gold-300 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300">
+          Book a Table <i class="bi bi-arrow-right ml-2"></i>
         </a>
       </div>
     </div>
@@ -83,125 +94,114 @@
 </section>
 
 <!-- Features Section -->
-<section class="features-section">
-  <div class="container">
-    <div class="text-center mb-5">
-      <span class="section-label">Why Choose Us</span>
-      <h2 class="section-title font-serif">What We Offer</h2>
-      <div class="section-divider center"></div>
+<section class="py-24 bg-warm-100">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="text-center mb-16">
+      <span class="text-gold-200 text-xs font-bold uppercase tracking-[4px]">Why Choose Us</span>
+      <h2 class="font-serif text-4xl lg:text-5xl font-bold text-gray-900 mt-3 mb-4">What We Offer</h2>
+      <div class="w-12 h-0.5 bg-gold-200 mx-auto"></div>
     </div>
-    <div class="row g-4">
-      <div class="col-lg-4 col-md-6">
-        <div class="feature-card">
-          <div class="feature-icon">
-            <i class="bi bi-egg-fried"></i>
-          </div>
-          <h5 class="fw-bold">Fresh Ingredients</h5>
-          <p>We use only the finest, locally-sourced ingredients to craft every dish on our menu with passion and care.</p>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div class="group bg-white rounded-2xl p-10 text-center border border-gray-100 hover:-translate-y-2 hover:shadow-2xl transition-all duration-500 relative overflow-hidden">
+        <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-gold-200 via-gold-100 to-gold-200 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+        <div class="w-20 h-20 rounded-full bg-gold-200/10 flex items-center justify-center text-3xl text-gold-200 mx-auto mb-5 group-hover:bg-gold-200 group-hover:text-white group-hover:scale-105 transition-all duration-500">
+          <i class="bi bi-egg-fried"></i>
         </div>
+        <h5 class="font-bold text-gray-900 text-lg mb-3">Fresh Ingredients</h5>
+        <p class="text-gray-400 text-sm leading-relaxed">We use only the finest, locally-sourced ingredients to craft every dish on our menu with passion and care.</p>
       </div>
-      <div class="col-lg-4 col-md-6">
-        <div class="feature-card">
-          <div class="feature-icon">
-            <i class="bi bi-people"></i>
-          </div>
-          <h5 class="fw-bold">Warm Atmosphere</h5>
-          <p>Enjoy a comfortable and inviting space designed for memorable dining moments with loved ones.</p>
+      <div class="group bg-white rounded-2xl p-10 text-center border border-gray-100 hover:-translate-y-2 hover:shadow-2xl transition-all duration-500 relative overflow-hidden">
+        <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-gold-200 via-gold-100 to-gold-200 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+        <div class="w-20 h-20 rounded-full bg-gold-200/10 flex items-center justify-center text-3xl text-gold-200 mx-auto mb-5 group-hover:bg-gold-200 group-hover:text-white group-hover:scale-105 transition-all duration-500">
+          <i class="bi bi-people"></i>
         </div>
+        <h5 class="font-bold text-gray-900 text-lg mb-3">Warm Atmosphere</h5>
+        <p class="text-gray-400 text-sm leading-relaxed">Enjoy a comfortable and inviting space designed for memorable dining moments with loved ones.</p>
       </div>
-      <div class="col-lg-4 col-md-6">
-        <div class="feature-card">
-          <div class="feature-icon">
-            <i class="bi bi-star"></i>
-          </div>
-          <h5 class="fw-bold">Exceptional Service</h5>
-          <p>Our professional staff ensures an impeccable dining experience from the moment you walk through the door.</p>
+      <div class="group bg-white rounded-2xl p-10 text-center border border-gray-100 hover:-translate-y-2 hover:shadow-2xl transition-all duration-500 relative overflow-hidden">
+        <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-gold-200 via-gold-100 to-gold-200 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+        <div class="w-20 h-20 rounded-full bg-gold-200/10 flex items-center justify-center text-3xl text-gold-200 mx-auto mb-5 group-hover:bg-gold-200 group-hover:text-white group-hover:scale-105 transition-all duration-500">
+          <i class="bi bi-star"></i>
         </div>
+        <h5 class="font-bold text-gray-900 text-lg mb-3">Exceptional Service</h5>
+        <p class="text-gray-400 text-sm leading-relaxed">Our professional staff ensures an impeccable dining experience from the moment you walk through the door.</p>
       </div>
     </div>
   </div>
 </section>
 
 <!-- Operating Hours Section -->
-<section id="hours" class="hours-section">
-  <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-lg-7">
-        <div class="text-center mb-5">
-          <span class="section-label">Visit Us</span>
-          <h2 class="section-title font-serif">Operating Hours</h2>
-          <div class="section-divider center"></div>
-        </div>
-        <div class="hours-card">
-          <div class="hours-header">
-            <div class="icon"><i class="bi bi-clock"></i></div>
-            <h5 class="font-serif">Weekly Schedule</h5>
-          </div>
-          <% hours.forEach(function(h) { %>
-            <div class="hours-row">
-              <span class="day-name"><%= h.day_name %></span>
-              <% if (h.is_open) { %>
-                <span class="time-range open">
-                  <i class="bi bi-circle-fill me-1" style="font-size:0.4rem;vertical-align:middle;"></i>
-                  <%= h.opening_time %> - <%= h.closing_time %>
-                </span>
-              <% } else { %>
-                <span class="time-range closed">Closed</span>
-              <% } %>
-            </div>
-          <% }); %>
-        </div>
+<section id="hours" class="py-24">
+  <div class="max-w-2xl mx-auto px-6">
+    <div class="text-center mb-12">
+      <span class="text-gold-200 text-xs font-bold uppercase tracking-[4px]">Visit Us</span>
+      <h2 class="font-serif text-4xl lg:text-5xl font-bold text-gray-900 mt-3 mb-4">Operating Hours</h2>
+      <div class="w-12 h-0.5 bg-gold-200 mx-auto"></div>
+    </div>
+    <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
+      <div class="bg-gradient-to-br from-dark-200 via-dark-100 to-dark-50 px-8 py-6 text-center">
+        <div class="text-gold-200 text-xl mb-1"><i class="bi bi-clock"></i></div>
+        <h5 class="font-serif text-white text-lg tracking-wide">Weekly Schedule</h5>
       </div>
+      <% hours.forEach(function(h) { %>
+        <div class="flex justify-between items-center px-8 py-4 border-b border-gray-50 last:border-0 hover:bg-warm-50 transition-colors">
+          <span class="font-semibold text-gray-800 text-sm"><%= h.day_name %></span>
+          <% if (h.is_open) { %>
+            <span class="text-emerald-600 text-sm font-medium flex items-center gap-1.5">
+              <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
+              <%= h.opening_time %> - <%= h.closing_time %>
+            </span>
+          <% } else { %>
+            <span class="text-red-400 text-sm font-semibold">Closed</span>
+          <% } %>
+        </div>
+      <% }); %>
     </div>
   </div>
 </section>
 
 <!-- CTA Section -->
-<section class="cta-section">
-  <div class="container cta-content text-center">
-    <span class="section-label" style="color: rgba(200,169,126,0.8);">Reservations Open</span>
-    <h2 class="cta-title font-serif fw-bold mb-3">Ready to Dine With Us?</h2>
-    <p class="cta-subtitle mb-4">Make a reservation in just a few clicks and secure your perfect table.</p>
-    <a href="/reserve" class="btn btn-cta">
-      <i class="bi bi-calendar-plus me-2"></i>Reserve Now
+<section class="py-24 relative overflow-hidden">
+  <div class="absolute inset-0 bg-gradient-to-br from-dark-200 via-dark-100 to-dark-50"></div>
+  <div class="absolute inset-0 hero-glow opacity-50"></div>
+  <div class="relative z-10 text-center max-w-2xl mx-auto px-6">
+    <span class="text-gold-200/70 text-xs font-bold uppercase tracking-[4px]">Reservations Open</span>
+    <h2 class="font-serif text-4xl lg:text-5xl font-bold text-white mt-4 mb-4">Ready to Dine With Us?</h2>
+    <p class="text-white/40 text-lg mb-8">Make a reservation in just a few clicks and secure your perfect table.</p>
+    <a href="/reserve" class="inline-flex items-center px-10 py-4 bg-gold-200 text-white text-sm font-semibold uppercase tracking-widest rounded-full hover:bg-gold-300 hover:shadow-[0_15px_40px_rgba(200,169,126,0.3)] hover:-translate-y-0.5 transition-all duration-300">
+      <i class="bi bi-calendar-plus mr-2"></i>Reserve Now
     </a>
   </div>
 </section>
 
 <!-- Contact Section -->
-<section id="contact" class="contact-section">
-  <div class="container">
-    <div class="text-center mb-5">
-      <span class="section-label">Get In Touch</span>
-      <h2 class="section-title font-serif">Contact Us</h2>
-      <div class="section-divider center"></div>
+<section id="contact" class="py-24 bg-warm-100">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="text-center mb-16">
+      <span class="text-gold-200 text-xs font-bold uppercase tracking-[4px]">Get In Touch</span>
+      <h2 class="font-serif text-4xl lg:text-5xl font-bold text-gray-900 mt-3 mb-4">Contact Us</h2>
+      <div class="w-12 h-0.5 bg-gold-200 mx-auto"></div>
     </div>
-    <div class="row g-4 justify-content-center">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
       <% if (restaurant.address) { %>
-        <div class="col-lg-4 col-md-6">
-          <div class="contact-card">
-            <div class="contact-icon"><i class="bi bi-geo-alt"></i></div>
-            <h6 class="fw-bold">Our Address</h6>
-            <p><%= restaurant.address %></p>
-          </div>
+        <div class="group bg-white rounded-2xl p-8 text-center border border-gray-100 hover:-translate-y-1 hover:shadow-xl transition-all duration-300">
+          <div class="w-16 h-16 rounded-full bg-gold-200/10 flex items-center justify-center text-2xl text-gold-200 mx-auto mb-4 group-hover:bg-gold-200 group-hover:text-white transition-all duration-300"><i class="bi bi-geo-alt"></i></div>
+          <h6 class="font-bold text-gray-900 mb-2">Our Address</h6>
+          <p class="text-gray-400 text-sm"><%= restaurant.address %></p>
         </div>
       <% } %>
       <% if (restaurant.phone) { %>
-        <div class="col-lg-4 col-md-6">
-          <div class="contact-card">
-            <div class="contact-icon"><i class="bi bi-telephone"></i></div>
-            <h6 class="fw-bold">Phone</h6>
-            <p><%= restaurant.phone %></p>
-          </div>
+        <div class="group bg-white rounded-2xl p-8 text-center border border-gray-100 hover:-translate-y-1 hover:shadow-xl transition-all duration-300">
+          <div class="w-16 h-16 rounded-full bg-gold-200/10 flex items-center justify-center text-2xl text-gold-200 mx-auto mb-4 group-hover:bg-gold-200 group-hover:text-white transition-all duration-300"><i class="bi bi-telephone"></i></div>
+          <h6 class="font-bold text-gray-900 mb-2">Phone</h6>
+          <p class="text-gray-400 text-sm"><%= restaurant.phone %></p>
         </div>
       <% } %>
       <% if (restaurant.email) { %>
-        <div class="col-lg-4 col-md-6">
-          <div class="contact-card">
-            <div class="contact-icon"><i class="bi bi-envelope"></i></div>
-            <h6 class="fw-bold">Email</h6>
-            <p><%= restaurant.email %></p>
-          </div>
+        <div class="group bg-white rounded-2xl p-8 text-center border border-gray-100 hover:-translate-y-1 hover:shadow-xl transition-all duration-300">
+          <div class="w-16 h-16 rounded-full bg-gold-200/10 flex items-center justify-center text-2xl text-gold-200 mx-auto mb-4 group-hover:bg-gold-200 group-hover:text-white transition-all duration-300"><i class="bi bi-envelope"></i></div>
+          <h6 class="font-bold text-gray-900 mb-2">Email</h6>
+          <p class="text-gray-400 text-sm"><%= restaurant.email %></p>
         </div>
       <% } %>
     </div>
